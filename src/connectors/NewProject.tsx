@@ -1,10 +1,20 @@
 import * as React from 'react'
+import { connect, Dispatch } from 'react-redux'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
+
+import { Project } from '../models/Project'
+import { AppActions } from '../state'
+
 import NewProject from '../components/NewProject'
 
 import { NoOpAction } from '../state'
+import { addProject } from '../state/actionCreators/projects'
 
-interface Props extends RouteComponentProps<{}> {}
+interface DispatchProps {
+  addProject: (project: Partial<Project>) => any
+}
+
+interface Props extends RouteComponentProps<{}>, DispatchProps {}
 
 type State = {
   projectName: string | null,
@@ -56,6 +66,16 @@ function setProjectDescription (description: string): SetDescription {
   }
 }
 
+function mapStateToProps () {
+  return {}
+}
+
+function mapDispatchToProps (dispatch: Dispatch<AppActions>): DispatchProps {
+  return {
+    addProject: (project: Partial<Project>) => dispatch(addProject(project))
+  }
+}
+
 class NewProjectConnector extends React.PureComponent<Props, State> {
   state = stateReducer({
     projectName: null,
@@ -79,6 +99,7 @@ class NewProjectConnector extends React.PureComponent<Props, State> {
       <NewProject
         setProjectName={this.setProjectName}
         setProjectDescription={this.setProjectDescription}
+        addProject={this.props.addProject}
         projectName={this.state.projectName}
         projectDescription={this.state.projectDescription}
       />
@@ -86,4 +107,4 @@ class NewProjectConnector extends React.PureComponent<Props, State> {
   }
 }
 
-export default withRouter(NewProjectConnector)
+export default withRouter(connect<{}, DispatchProps, RouteComponentProps<{}>>(mapStateToProps, mapDispatchToProps)(NewProjectConnector))

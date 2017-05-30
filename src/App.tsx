@@ -15,8 +15,8 @@ class App extends React.Component<{}, null> {
             <h2>Welcome to React</h2>
           </div>
 
-          <Link to='/project'>Project view</Link>
-          <Link to='/project/test/entry/test'>Test project</Link>
+          <Link to='/project'>Project list</Link>
+          <Link to='/project/test/task/test'>Test project</Link>
 
           <Route path='/project' component={ProjectList} />
           <Route exact={true} path='/project/new' component={NewProject} />
