@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Link } from 'react-router-dom'
 import AddTime from './connectors/AddTime'
 import NewProject from './connectors/NewProject'
 import ProjectList from './connectors/ProjectList'
+import ViewProject from './connectors/ViewProject'
 
 class App extends React.Component<{}, null> {
   render () {
@@ -18,9 +19,18 @@ class App extends React.Component<{}, null> {
           <Link to='/project'>Project list</Link>
           <Link to='/project/test/task/test'>Test project</Link>
 
-          <Route path='/project' component={ProjectList} />
+          <Route exact={true} path='/project' component={ProjectList} />
           <Route exact={true} path='/project/new' component={NewProject} />
-          <Route exact={true} path='/project/:projectId/entry/:entryId' component={AddTime} />
+          <Route
+            exact={true}
+            path='/project/:projectId'
+            component={ViewProject}
+          />
+          <Route
+            exact={true}
+            path='/project/:projectId/entry/:entryId'
+            component={AddTime}
+          />
         </div>
       </BrowserRouter>
     )

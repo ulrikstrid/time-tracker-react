@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom'
 
 import { Project } from '../models/Project'
 import { AppActions } from '../state'
@@ -107,4 +107,4 @@ class NewProjectConnector extends React.PureComponent<Props, State> {
   }
 }
 
-export default withRouter(connect<{}, DispatchProps, RouteComponentProps<{}>>(mapStateToProps, mapDispatchToProps)(NewProjectConnector))
+export default connect<{}, DispatchProps, RouteComponentProps<{}>>(mapStateToProps, mapDispatchToProps)(NewProjectConnector)

@@ -1,7 +1,7 @@
 import { addEntry, removeEntry } from '../state/actionCreators/entries'
 import { Dispatch } from 'redux'
 import { connect } from 'react-redux'
-import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router-dom'
 
 import { AppState, AppActions, getTimeEntries } from '../state/index'
 
@@ -23,4 +23,4 @@ function mapDispatchToProps (dispatch: Dispatch<AppActions>) {
   }
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AddTime))
+export default connect(mapStateToProps, mapDispatchToProps)(AddTime)

@@ -9,8 +9,15 @@ export type State = {
 }
 
 export const initialState: State = {
-  ids: [],
-  projects: {}
+  ids: ['test'],
+  projects: {
+    test: {
+      id: 'test',
+      taskIds: [],
+      name: 'test',
+      description: 'test'
+    }
+  }
 }
 
 export function reducer (state: State = initialState, action: AppActions) {

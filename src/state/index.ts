@@ -36,6 +36,20 @@ export function getTimeEntries (state: AppState) {
   return entriesReducer.getEntries(state.entries)
 }
 
+export function getProjectTasks (state: AppState, projectId: string) {
+  return projectsReducer.getProject(state.projects, projectId).taskIds
+    .map((taskId) => tasksReducer.getTask(state.tasks, taskId))
+}
+
+export function getProjectTimeEntries (state: AppState, projectId: string) {
+  return projectsReducer.getProject(state.projects, projectId).taskIds
+    .map((taskId) => tasksReducer.getTask(state.tasks, taskId))
+}
+
 export function getProjects (state: AppState) {
   return projectsReducer.getProjects(state.projects)
+}
+
+export function getProject (state: AppState, projectId: string) {
+  return projectsReducer.getProject(state.projects, projectId)
 }
