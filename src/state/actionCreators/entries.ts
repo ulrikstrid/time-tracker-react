@@ -5,7 +5,8 @@ export type AddEntry = {
   type: 'ADD_TIME_ENTRY',
   payload: {
     entry: TimeEntry,
-    taskId: string
+    taskId: string,
+    projectId: string
   }
 }
 
@@ -16,16 +17,20 @@ export type RemoveEntry = {
 
 export type Actions = AddEntry | RemoveEntry
 
-export function addEntry (taskId: string, timeEntry: Partial<TimeEntry>): AddEntry {
+export function addEntry (projectId: string, taskId: string, timeEntry: Partial<TimeEntry>): AddEntry {
+  console.log(timeEntry)
   return {
     type: 'ADD_TIME_ENTRY',
     payload: {
       entry: {
         id: timeEntry.id || GUID.generate(),
         from: timeEntry.from || new Date(),
-        to: timeEntry.to || new Date()
+        to: timeEntry.to || new Date(),
+        taskId,
+        projectId
       },
-      taskId
+      taskId,
+      projectId
     }
   }
 }

@@ -1,4 +1,4 @@
-import { reducer, initialState, getEntries, getEntry } from './entries'
+import { reducer, initialState, getEntries, getEntry, State } from './entries'
 import { addEntry, removeEntry } from '../actionCreators/entries'
 
 test('no-op task', () => {
@@ -8,16 +8,20 @@ test('no-op task', () => {
 const firstEntry = {
   id: 'test-id',
   from: new Date(),
-  to: new Date()
+  to: new Date(),
+  taskId: 'default',
+  projectId: 'test-project'
 }
 
 const secondEntry = {
   id: 'testId',
   from: new Date(),
-  to: new Date()
+  to: new Date(),
+  taskId: 'default',
+  projectId: 'test-project'
 }
 
-const testState = {
+const testState: State = {
   ids: ['test-id', 'testId'],
   entries: {
     'test-id': firstEntry,
@@ -26,7 +30,7 @@ const testState = {
 }
 
 test('can add entry', () => {
-  const newState = reducer(initialState, addEntry('test-task', firstEntry))
+  const newState = reducer(initialState, addEntry('test-project', 'default', firstEntry))
 
   expect(newState.ids).toContain('test-id')
   expect(newState.entries).toEqual({

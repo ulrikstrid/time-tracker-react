@@ -1,26 +1,19 @@
 import { connect } from 'react-redux'
-import { RouteComponentProps } from 'react-router-dom'
 
-import {
-  AppState,
-  getProject,
-  getProjectTasks
-} from '../state/index'
-import ViewProject from '../components/ViewProject'
+import { AppState, getProject, getProjectTasks, getProjectTimeEntries } from '../state';
+import ViewProject, { Props } from '../components/ViewProject'
 
-type Match = {
+interface OwnProps {
   projectId: string
 }
 
-interface OwnProps extends RouteComponentProps<Match> {}
-
-function mapStateToProps (appState: AppState, ownProps: OwnProps) {
+function mapStateToProps (appState: AppState, ownProps: OwnProps): Props {
   return {
-    project: getProject(appState, ownProps.match.params.projectId),
-    tasks: getProjectTasks(appState, ownProps.match.params.projectId),
-    timeEntries: [],
-    ...ownProps
+    project: getProject(appState, ownProps.projectId),
+    tasks: getProjectTasks(appState, ownProps.projectId),
+    timeEntries: getProjectTimeEntries(appState, ownProps.projectId)
   }
 }
 
-export default connect(mapStateToProps)(ViewProject)
+const ViewProjectConnector: React.ComponentClass<{ projectId: string }> = connect<Props, {} , OwnProps>(mapStateToProps)(ViewProject)
+export default ViewProjectConnector

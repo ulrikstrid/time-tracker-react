@@ -1,6 +1,7 @@
 import * as React from 'react'
+import { BrowserRouter, Route, Link, RouteComponentProps } from 'react-router-dom'
+
 import './App.css'
-import { BrowserRouter, Route, Link } from 'react-router-dom'
 
 import AddTime from './connectors/AddTime'
 import NewProject from './connectors/NewProject'
@@ -17,20 +18,13 @@ class App extends React.Component<{}, null> {
           </div>
 
           <Link to='/project'>Project list</Link>
-          <Link to='/project/test/task/test'>Test project</Link>
+          <Link to='/project/new'>New project</Link>
 
-          <Route exact={true} path='/project' component={ProjectList} />
-          <Route exact={true} path='/project/new' component={NewProject} />
-          <Route
-            exact={true}
-            path='/project/:projectId'
-            component={ViewProject}
-          />
-          <Route
-            exact={true}
-            path='/project/:projectId/entry/:entryId'
-            component={AddTime}
-          />
+          <Route exact={true} path='/' render={() => <ProjectList />} />
+          <Route exact={true} path='/project' render={() => <ProjectList />} />
+          <Route exact={true} path='/project/new' render={() => <NewProject />} />
+          <Route exact={false} path='/project/:projectId' render={(routeProps: RouteComponentProps<{projectId: string}>) => <ViewProject projectId={routeProps.match.params.projectId} />} />
+          <Route exact={true} path='/project/:projectId' render={(routeProps: RouteComponentProps<{projectId: string}>) => <AddTime projectId={routeProps.match.params.projectId} />} />
         </div>
       </BrowserRouter>
     )

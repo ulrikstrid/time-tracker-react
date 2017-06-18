@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { RouteComponentProps } from 'react-router-dom'
 
 import { Project } from '../models/Project'
 import { AppActions } from '../state'
@@ -14,7 +13,7 @@ interface DispatchProps {
   addProject: (project: Partial<Project>) => any
 }
 
-interface Props extends RouteComponentProps<{}>, DispatchProps {}
+interface Props extends DispatchProps {}
 
 type State = {
   projectName: string | null,
@@ -76,7 +75,7 @@ function mapDispatchToProps (dispatch: Dispatch<AppActions>): DispatchProps {
   }
 }
 
-class NewProjectConnector extends React.PureComponent<Props, State> {
+class NewProjectConnectorClass extends React.PureComponent<Props, State> {
   state = stateReducer({
     projectName: null,
     projectDescription: null
@@ -107,4 +106,5 @@ class NewProjectConnector extends React.PureComponent<Props, State> {
   }
 }
 
-export default connect<{}, DispatchProps, RouteComponentProps<{}>>(mapStateToProps, mapDispatchToProps)(NewProjectConnector)
+const NewProjectConnector: React.ComponentClass<{}> = connect<{}, DispatchProps, {}>(mapStateToProps, mapDispatchToProps)(NewProjectConnectorClass)
+export default NewProjectConnector

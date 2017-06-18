@@ -1,3 +1,7 @@
+import { Project } from '../models/Project'
+import { Task } from '../models/Task'
+import { TimeEntry } from '../models/TimeEntry'
+
 import * as entriesReducer from './reducers/entries'
 import * as entriesActions from './actionCreators/entries'
 import * as projectsReducer from './reducers/projects'
@@ -32,24 +36,24 @@ export function appReducer (state: AppState = initialState, action: AppActions):
   }
 }
 
-export function getTimeEntries (state: AppState) {
+export function getTimeEntries (state: AppState): TimeEntry[] {
   return entriesReducer.getEntries(state.entries)
 }
 
-export function getProjectTasks (state: AppState, projectId: string) {
+export function getProjectTasks (state: AppState, projectId: string): Task[] {
   return projectsReducer.getProject(state.projects, projectId).taskIds
     .map((taskId) => tasksReducer.getTask(state.tasks, taskId))
 }
 
-export function getProjectTimeEntries (state: AppState, projectId: string) {
-  return projectsReducer.getProject(state.projects, projectId).taskIds
-    .map((taskId) => tasksReducer.getTask(state.tasks, taskId))
+export function getProjectTimeEntries (state: AppState, projectId: string): TimeEntry[] {
+  return projectsReducer.getProject(state.projects, projectId).entryIds
+    .map((entryId) => entriesReducer.getEntry(state.entries, entryId))
 }
 
-export function getProjects (state: AppState) {
+export function getProjects (state: AppState): Project[] {
   return projectsReducer.getProjects(state.projects)
 }
 
-export function getProject (state: AppState, projectId: string) {
+export function getProject (state: AppState, projectId: string): Project {
   return projectsReducer.getProject(state.projects, projectId)
 }

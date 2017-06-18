@@ -13,7 +13,8 @@ export const initialState: State = {
   projects: {
     test: {
       id: 'test',
-      taskIds: [],
+      taskIds: ['default'],
+      entryIds: [],
       name: 'test',
       description: 'test'
     }
@@ -46,6 +47,20 @@ export function reducer (state: State = initialState, action: AppActions) {
 
           return projects
         }, {})
+      }
+    }
+
+    case 'ADD_TIME_ENTRY': {
+      console.log(action)
+      return {
+        ...state,
+        projects: {
+          ...state.projects,
+          [action.payload.projectId]: {
+            ...state.projects[action.payload.projectId],
+            entryIds: [ ...state.projects[action.payload.projectId].entryIds, action.payload.entry.id ]
+          }
+        }
       }
     }
 

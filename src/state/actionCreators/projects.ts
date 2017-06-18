@@ -20,7 +20,8 @@ export function addProject (project: Partial<Project>): AddProject {
       id: project.id || GUID.generate(),
       name: project.name || GUID.generate(),
       description: project.description || '',
-      taskIds: project.taskIds || []
+      taskIds: project.taskIds || [],
+      entryIds: project.entryIds || []
     }
   }
 }

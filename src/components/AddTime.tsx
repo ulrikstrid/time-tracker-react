@@ -1,29 +1,42 @@
-import { TimeEntry } from '../models/TimeEntry'
 import * as React from 'react'
-import { RouteComponentProps } from 'react-router-dom'
+import { Task } from '../models/Task'
+import { TimeEntry } from '../models/TimeEntry'
 
-export interface Props extends RouteComponentProps<{ entryId: string, projectId: string }> {
-  timeEntries: TimeEntry[]
-  addTimeEntry: (taskId: string, from: Date, to: Date) => void
-  removeTimeEntry: (id: string) => void
-}
-
-function TimeItem (timeEntry: TimeEntry) {
-  return <li key={timeEntry.id}>{timeEntry.from.toDateString()}</li>
+export interface Props {
+  newEntry: Partial<TimeEntry>
+  selectedDate: Date
+  tasks: Task[]
+  updateSelectedDate: React.ChangeEventHandler<HTMLInputElement>
+  updateFromDate: React.ChangeEventHandler<HTMLInputElement>
+  updateToDate: React.ChangeEventHandler<HTMLInputElement>
+  updateTask: React.ChangeEventHandler<HTMLSelectElement>
+  submitEntry: React.FormEventHandler<HTMLFormElement>
 }
 
 export function AddTime (props: Props) {
   return (
     <div>
-      <form>
-        <input type='date' />
-        <input type='date' />
-        <input type='submit' />
+      <form onSubmit={props.submitEntry}>
+        <input
+          type='date'
+          onChange={props.updateSelectedDate}
+          defaultValue={props.selectedDate.toLocaleDateString()}
+        />
+        <input
+          type='time'
+          onChange={props.updateFromDate}
+          defaultValue={props.newEntry.from && props.newEntry.from.toLocaleTimeString()}
+        />
+        <input
+          type='time'
+          onChange={props.updateToDate}
+          defaultValue={props.newEntry.to && props.newEntry.to.toLocaleTimeString()}
+        />
+        <select value={props.newEntry.taskId} onChange={props.updateTask}>
+          {props.tasks.map((task) => <option key={task.id} value={task.id}>{task.name}</option>)}
+        </select>
+        <input type='submit'/>
       </form>
-
-      <ul>
-        {props.timeEntries.map(TimeItem)}
-      </ul>
     </div>
   )
 }

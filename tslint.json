@@ -3,5 +3,8 @@
     "tslint-react",
     "tslint-config-standard",
     "tslint-config-prettier"
-  ]
+  ],
+  "rules": {
+    "jsx-no-lambda": false
+  }
 }

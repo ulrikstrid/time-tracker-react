@@ -1,6 +1,11 @@
 import { getTask, getTasks, initialState, reducer } from './tasks'
 import { addTask, removeTask } from '../actionCreators/tasks'
 
+const emptyState = {
+  ids: [],
+  tasks: {}
+}
+
 const partialTask = {
   id: 'test-id',
   name: 'test-task',
@@ -13,7 +18,7 @@ test('no-op task', () => {
 })
 
 test('can add task', () => {
-  const newState = reducer(initialState, addTask('test-project', partialTask))
+  const newState = reducer(emptyState, addTask('test-project', partialTask))
 
   expect(newState.ids).toContain('test-id')
   expect(newState.tasks).toEqual({
@@ -21,7 +26,7 @@ test('can add task', () => {
   })
 })
 
-test('can remove project', () =>  {
+test('can remove task', () =>  {
   const newState = reducer({
     ids: ['test-id'],
     tasks: {
@@ -29,7 +34,7 @@ test('can remove project', () =>  {
     }
   }, removeTask('test-id'))
 
-  expect(newState).toEqual(initialState)
+  expect(newState).toEqual(emptyState)
 })
 
 test('get helpers', () => {
