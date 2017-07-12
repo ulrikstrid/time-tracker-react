@@ -1,0 +1,27 @@
+{
+  "name": "time-tracker-server",
+  "version": "1.0.0",
+  "description": "Server part of time tracker",
+  "main": "build/index.js",
+  "scripts": {
+    "tsc-watch": "tsc -w",
+    "watch": "nodemon --watch build build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/hapi": "^16.1.6",
+    "@types/inert": "^4.2.2",
+    "hapi": "^16.4.3",
+    "inert": "^4.2.0",
+    "joi": "^10.6.0",
+    "typescript": "^2.4.1",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "@types/joi": "^10.4.0",
+    "@types/uuid": "^3.0.0",
+    "nodemon": "^1.11.0"
+  }
+}
