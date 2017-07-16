@@ -1,27 +1,42 @@
 {
-  "name": "time-tracker-server",
-  "version": "1.0.0",
-  "description": "Server part of time tracker",
-  "main": "build/index.js",
-  "scripts": {
-    "tsc-watch": "tsc -w",
-    "watch": "nodemon --watch build build/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@types/hapi": "^16.1.6",
-    "@types/inert": "^4.2.2",
-    "hapi": "^16.4.3",
-    "inert": "^4.2.0",
-    "joi": "^10.6.0",
-    "typescript": "^2.4.1",
-    "uuid": "^3.1.0"
-  },
-  "devDependencies": {
-    "@types/joi": "^10.4.0",
-    "@types/uuid": "^3.0.0",
-    "nodemon": "^1.11.0"
-  }
+	"name": "time-tracker-server",
+	"version": "1.0.0",
+	"description": "Server part of time tracker",
+	"main": "build/index.js",
+	"scripts": {
+		"start": "node build/index.js",
+		"tsc": "tsc",
+		"watch:tsc": "tsc -w",
+		"watch:server": "nodemon --watch build build/src/index.js",
+		"dev": "npm run watch:tsc & npm run watch:server",
+		"test": "lab --sourcemaps --transform node_modules/lab-transform-typescript",
+		"watch:test": "nodemon --delay 2 --watch src --watch test  -r ts --exec npm test",
+		"migrate": "pg-migrate",
+		"migrate:up": "pg-migrate up -m build/migrations",
+		"migrate:down": "pg-migrate down -m build/migrations"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@types/hapi": "^16.1.6",
+		"@types/inert": "^4.2.2",
+		"hapi": "^16.4.3",
+		"inert": "^4.2.0",
+		"joi": "^10.6.0",
+		"node-pg-migrate": "^2.3.0",
+		"pg-promise": "^6.3.5",
+		"typescript": "^2.4.1",
+		"uuid": "^3.1.0"
+	},
+	"devDependencies": {
+		"@types/code": "^4.0.3",
+		"@types/joi": "^10.4.0",
+		"@types/lab": "^11.1.0",
+		"@types/node-pg-migrate": "^2.3.0",
+		"@types/uuid": "^3.0.0",
+		"code": "^4.1.0",
+		"lab": "^14.1.0",
+		"lab-transform-typescript": "^3.0.1",
+		"nodemon": "^1.11.0"
+	}
 }

@@ -1,0 +1,13 @@
+[*]
+end_of_line = lf
+insert_final_newline = true
+
+[*.{js,ts}]
+charset = utf-8
+indent_size = 2
+indent_style = space
+
+# Matches the exact files either package.json or circle.yml
+[{package.json,circle.yml}]
+indent_style = space
+indent_size = 2

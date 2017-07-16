@@ -1,12 +1,14 @@
 {
-  "compilerOptions": {
-    "outDir": "build",
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "typeRoots": ["node_modules/@types"]
-  },
-  "include": ["src/**/**.ts", "test/**/**.ts"],
-  "exclude": ["node_modules"]
+	"compilerOptions": {
+		"outDir": "build",
+		"target": "es6",
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"sourceMap": true,
+		"typeRoots": ["node_modules/@types"],
+		"strictNullChecks": true,
+		"noImplicitAny": true
+	},
+	"include": ["src/**/*.ts", "test/**/*.ts", "migrations/*.ts"],
+	"exclude": ["node_modules"]
 }
