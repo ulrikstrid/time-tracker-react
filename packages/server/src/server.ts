@@ -2,6 +2,8 @@ import * as Hapi from "hapi";
 import * as pgp from "pg-promise";
 
 import * as Projects from "./Projects";
+import * as Task from "./Task";
+import * as TimeEntry from "./TimeEntry";
 import { InitConfig } from "./config";
 
 export function init(configs: InitConfig) {
@@ -10,7 +12,7 @@ export function init(configs: InitConfig) {
 		const server = new Hapi.Server();
 		const db = pgp()(configs.db);
 
-		console.log(db);
+		server.app.db = db;
 
 		server.connection({
 			port: port,
@@ -20,6 +22,8 @@ export function init(configs: InitConfig) {
 		});
 
 		Projects.init(server);
+		Task.init(server);
+		TimeEntry.init(server);
 
 		resolve(server);
 	});

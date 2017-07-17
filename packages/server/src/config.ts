@@ -25,7 +25,7 @@ export const db: DbConfig = {
 	host: process.env.DB_HOST || "localhost",
 	port: parseInt(dbPort, 10),
 	database: process.env.DB_NAME || "time_tracker_dev",
-	user: process.env.DB_USER || "postgres",
+	user: process.env.DB_USER || "ulrik",
 	password: process.env.DB_PASSWORD || "postgres"
 };
 

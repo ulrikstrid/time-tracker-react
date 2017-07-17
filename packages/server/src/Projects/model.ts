@@ -9,6 +9,11 @@ export type Project = {
 	description: string | null;
 };
 
+export type NewProject = {
+	name: string;
+	description: string | null;
+};
+
 const uuidv4 = Joi.string().guid({
 	version: ["uuidv4"]
 });

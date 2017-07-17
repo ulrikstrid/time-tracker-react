@@ -14,7 +14,7 @@ export const up = (pgm: PGM.MigrationBuilder) => {
 		},
 		description: {
 			type: "string",
-			notNull: true
+			notNull: false
 		}
 	});
 };
