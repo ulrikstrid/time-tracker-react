@@ -8,15 +8,15 @@ export const up = (pgm: PGM.MigrationBuilder) => {
 			unique: true,
 			notNull: true
 		},
-		startTime: {
+		start_time: {
 			notNull: true,
 			type: "timestamp"
 		},
-		endTime: {
+		end_time: {
 			notNull: true,
 			type: "timestamp"
 		},
-		taskId: {
+		task_id: {
 			type: "uuid",
 			references: "task",
 			notNull: true

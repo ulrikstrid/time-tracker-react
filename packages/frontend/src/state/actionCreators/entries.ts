@@ -1,26 +1,29 @@
-import { TimeEntry } from '../../models/TimeEntry'
-import * as GUID from '../../models/GUID'
+import { TimeEntry } from "../../models/TimeEntry";
+import * as GUID from "../../models/GUID";
 
 export type AddEntry = {
-  type: 'ADD_TIME_ENTRY',
+  type: "ADD_TIME_ENTRY";
   payload: {
-    entry: TimeEntry,
-    taskId: string,
-    projectId: string
-  }
-}
+    entry: TimeEntry;
+    taskId: string;
+    projectId: string;
+  };
+};
 
 export type RemoveEntry = {
-  type: 'REMOVE_TIME_ENTRY',
-  payload: string
-}
+  type: "REMOVE_TIME_ENTRY";
+  payload: string;
+};
 
-export type Actions = AddEntry | RemoveEntry
+export type Actions = AddEntry | RemoveEntry;
 
-export function addEntry (projectId: string, taskId: string, timeEntry: Partial<TimeEntry>): AddEntry {
-  console.log(timeEntry)
+export function addEntry(
+  projectId: string,
+  taskId: string,
+  timeEntry: Partial<TimeEntry>
+): AddEntry {
   return {
-    type: 'ADD_TIME_ENTRY',
+    type: "ADD_TIME_ENTRY",
     payload: {
       entry: {
         id: timeEntry.id || GUID.generate(),
@@ -32,12 +35,12 @@ export function addEntry (projectId: string, taskId: string, timeEntry: Partial<
       taskId,
       projectId
     }
-  }
+  };
 }
 
-export function removeEntry (entryId: string): RemoveEntry {
+export function removeEntry(entryId: string): RemoveEntry {
   return {
-    type: 'REMOVE_TIME_ENTRY',
+    type: "REMOVE_TIME_ENTRY",
     payload: entryId
-  }
+  };
 }
