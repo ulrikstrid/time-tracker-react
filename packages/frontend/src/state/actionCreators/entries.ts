@@ -72,14 +72,18 @@ export function removeEntry(entryId: string): RemoveEntry {
   };
 }
 
-export function setFilterStart(date: string | moment.Moment): SetStartFilter {
+export function setFilterStart(
+  date: string | Date | moment.Moment
+): SetStartFilter {
   return {
     type: "SET_START_FILTER",
     payload: moment(date)
   };
 }
 
-export function setFilterEnd(date: string | moment.Moment): SetEndFilter {
+export function setFilterEnd(
+  date: string | Date | moment.Moment
+): SetEndFilter {
   return {
     type: "SET_END_FILTER",
     payload: moment(date)
