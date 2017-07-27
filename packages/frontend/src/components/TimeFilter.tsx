@@ -31,7 +31,7 @@ const PickerWrapper = styled.div`
   margin: 5px;
 `;
 
-export default class TimeList extends React.PureComponent<Props, void> {
+export default class TimeFilter extends React.PureComponent<Props, void> {
   render() {
     return (
       <Wrapper>
