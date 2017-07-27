@@ -1,3 +1,4 @@
+import * as moment from "moment";
 import { TimeEntry } from "../../models/TimeEntry";
 import * as GUID from "../../models/GUID";
 
@@ -15,7 +16,32 @@ export type RemoveEntry = {
   payload: string;
 };
 
-export type Actions = AddEntry | RemoveEntry;
+export type SetEntries = {
+  type: "SET_TIME_ENTRIES";
+  payload: TimeEntry[];
+};
+
+export type GetEntries = {
+  type: "GET_TIME_ENTRIES";
+};
+
+export type SetStartFilter = {
+  type: "SET_START_FILTER";
+  payload: moment.Moment;
+};
+
+export type SetEndFilter = {
+  type: "SET_END_FILTER";
+  payload: moment.Moment;
+};
+
+export type Actions =
+  | AddEntry
+  | RemoveEntry
+  | GetEntries
+  | SetEntries
+  | SetEndFilter
+  | SetStartFilter;
 
 export function addEntry(
   projectId: string,
@@ -27,8 +53,9 @@ export function addEntry(
     payload: {
       entry: {
         id: timeEntry.id || GUID.generate(),
-        from: timeEntry.from || new Date(),
-        to: timeEntry.to || new Date(),
+        from: timeEntry.from || "",
+        to: timeEntry.to || "",
+        date: moment(timeEntry.date),
         taskId,
         projectId
       },
@@ -42,5 +69,19 @@ export function removeEntry(entryId: string): RemoveEntry {
   return {
     type: "REMOVE_TIME_ENTRY",
     payload: entryId
+  };
+}
+
+export function setFilterStart(date: string | moment.Moment): SetStartFilter {
+  return {
+    type: "SET_START_FILTER",
+    payload: moment(date)
+  };
+}
+
+export function setFilterEnd(date: string | moment.Moment): SetEndFilter {
+  return {
+    type: "SET_END_FILTER",
+    payload: moment(date)
   };
 }

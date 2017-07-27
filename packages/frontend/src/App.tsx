@@ -2,50 +2,31 @@ import * as React from "react";
 import {
   BrowserRouter,
   Route,
-  Link,
-  RouteComponentProps
+  Link
+  // RouteComponentProps
 } from "react-router-dom";
 
 import "./App.css";
 
-import AddTime from "./connectors/AddTime";
-import NewProject from "./connectors/NewProject";
+// import AddTime from "./connectors/AddTime";
 import ProjectList from "./connectors/ProjectList";
-import ViewProject from "./connectors/ViewProject";
-
-fetch("/api/tasks").then(x => x.json()).then(x => console.log(x));
+import TaskList from "./connectors/TaskList";
+import TimeFilter from "./connectors/TimeFilter";
+import TimeList from "./connectors/TimeList";
 
 class App extends React.Component<{}, null> {
   render() {
     return (
       <BrowserRouter>
         <div className="App">
-          <div className="App-header">
-            <h2>Welcome to React</h2>
-          </div>
-
-          <Link to="/project">Project list</Link>
-          <Link to="/project/new">New project</Link>
+          <Link to="/tasks">Task list</Link>
+          <Link to="/entries">Time entries</Link>
 
           <Route exact={true} path="/" render={() => <ProjectList />} />
-          <Route exact={true} path="/project" render={() => <ProjectList />} />
-          <Route
-            exact={true}
-            path="/project/new"
-            render={() => <NewProject />}
-          />
-          <Route
-            exact={false}
-            path="/project/:projectId"
-            render={(routeProps: RouteComponentProps<{ projectId: string }>) =>
-              <ViewProject projectId={routeProps.match.params.projectId} />}
-          />
-          <Route
-            exact={true}
-            path="/project/:projectId"
-            render={(routeProps: RouteComponentProps<{ projectId: string }>) =>
-              <AddTime projectId={routeProps.match.params.projectId} />}
-          />
+
+          <Route exact={true} path="/tasks" render={() => <TaskList />} />
+          <Route path="/entries" render={() => <TimeFilter />} />
+          <Route exact={true} path="/entries" render={() => <TimeList />} />
         </div>
       </BrowserRouter>
     );

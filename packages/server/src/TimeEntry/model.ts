@@ -3,14 +3,16 @@ import * as Joi from "joi";
 
 export type TimeEntry = {
   id: string;
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
   taskId: string;
+  date: string;
 };
 
 export type NewTimeEntry = {
-  from: Date;
-  to: Date;
+  from: string;
+  to: string;
+  date: string;
   taskId: string;
 };
 
@@ -19,6 +21,7 @@ export type TimeEntryDB = {
   start_time: string;
   end_time: string;
   task_id: string;
+  date: string;
 };
 
 const uuidv4 = Joi.string().guid({
@@ -29,7 +32,8 @@ export const timeEntrySchema = Joi.object().keys({
   id: uuidv4,
   taskId: uuidv4,
   from: Joi.string(),
-  to: Joi.string()
+  to: Joi.string(),
+  date: Joi.string()
 });
 
 export function createTimeEntry(newEntry: NewTimeEntry): TimeEntry {
@@ -37,7 +41,8 @@ export function createTimeEntry(newEntry: NewTimeEntry): TimeEntry {
     id: uuid.v4(),
     taskId: newEntry.taskId,
     from: newEntry.from,
-    to: newEntry.to
+    to: newEntry.to,
+    date: newEntry.date
   };
 }
 
@@ -45,8 +50,9 @@ export function timeEntryFromDB(dbFormat: TimeEntryDB): TimeEntry {
   return {
     id: dbFormat.id,
     taskId: dbFormat.task_id,
-    from: new Date(dbFormat.start_time),
-    to: new Date(dbFormat.end_time)
+    from: dbFormat.start_time,
+    to: dbFormat.end_time,
+    date: dbFormat.date.toString().substr(0, 10)
   };
 }
 

@@ -21,6 +21,19 @@ export function init(server: Hapi.Server) {
 
   server.route({
     method: "GET",
+    path: "/api/timeentries",
+    config: {
+      handler: (request, reply) => {
+        repo.getTimeEntries(request.server.app.db).then(reply).catch(error => {
+          console.log(error);
+          reply(error, null);
+        });
+      }
+    }
+  });
+
+  server.route({
+    method: "GET",
     path: "/api/timeentries/{id}",
     config: {
       handler: (request, reply) => {

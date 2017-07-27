@@ -1,39 +1,53 @@
-import * as React from 'react'
+import * as React from "react";
 
-import { Task } from '../models/Task'
-import { TimeEntry } from '../models/TimeEntry'
-import { Project } from '../models/Project'
+import { Task } from "../models/Task";
+import { TimeEntry } from "../models/TimeEntry";
+import { Project } from "../models/Project";
 
 export interface Props {
-  project: Project
-  tasks: Task[]
-  timeEntries: TimeEntry[]
+  project: Project;
+  tasks: Task[];
+  timeEntries: TimeEntry[];
 }
 
-export function TaskRow (task: Task) {
+export function TaskRow(task: Task) {
   return (
     <tr key={task.id}>
-      <td>{task.name}</td>
-      <td>{task.description}</td>
+      <td>
+        {task.name}
+      </td>
+      <td>
+        {task.description}
+      </td>
     </tr>
-  )
+  );
 }
 
-export function TimeEntryRow (entry: TimeEntry) {
+export function TimeEntryRow(entry: TimeEntry) {
   return (
     <tr key={entry.id}>
-      <td>{entry.from.toTimeString()}</td>
-      <td>{entry.to.toTimeString()}</td>
-      <td>{entry.taskId}</td>
+      <td>
+        {entry.from}
+      </td>
+      <td>
+        {entry.to}
+      </td>
+      <td>
+        {entry.taskId}
+      </td>
     </tr>
-  )
+  );
 }
 
-export function ProjectList (props: Props) {
+export function ProjectList(props: Props) {
   return (
     <div>
-      <h2>{props.project.name}</h2>
-      <p>{props.project.description}</p>
+      <h2>
+        {props.project.name}
+      </h2>
+      <p>
+        {props.project.description}
+      </p>
 
       <table>
         <thead>
@@ -61,7 +75,7 @@ export function ProjectList (props: Props) {
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
-export default ProjectList
+export default ProjectList;

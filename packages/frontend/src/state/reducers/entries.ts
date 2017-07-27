@@ -1,22 +1,35 @@
-import { TimeEntry } from '../../models/TimeEntry'
-import { AppActions } from '../index'
+import * as moment from "moment";
+
+import { TimeEntry } from "../../models/TimeEntry";
+import { AppActions } from "../index";
+
+export type TimeEntryFilter = {
+  start: moment.Moment;
+  end: moment.Moment;
+};
 
 export type State = {
-  ids: string[],
+  ids: string[];
   entries: {
-    [key: string]: TimeEntry
-  }
-}
+    [key: string]: TimeEntry;
+  };
+  filter: TimeEntryFilter;
+};
 
 export const initialState: State = {
   ids: [],
-  entries: {}
-}
+  entries: {},
+  filter: {
+    start: moment().weekday(0),
+    end: moment().weekday(6)
+  }
+};
 
-export function reducer (state: State = initialState, action: AppActions) {
+export function reducer(state: State = initialState, action: AppActions) {
   switch (action.type) {
-    case 'ADD_TIME_ENTRY': {
+    case "ADD_TIME_ENTRY": {
       return {
+        ...state,
         ids: [...state.ids, action.payload.entry.id],
         entries: {
           ...state.entries,
@@ -24,32 +37,68 @@ export function reducer (state: State = initialState, action: AppActions) {
             ...action.payload.entry
           }
         }
-      }
+      };
     }
-    case 'REMOVE_TIME_ENTRY': {
-      const newIdList = state.ids
-        .filter((id) => id !== action.payload)
+
+    case "REMOVE_TIME_ENTRY": {
+      const newIdList = state.ids.filter(id => id !== action.payload);
 
       return {
+        ...state,
         ids: newIdList,
         entries: newIdList
-          .map((id) => state.entries[id])
+          .map(id => state.entries[id])
           .reduce((entries, entry) => {
-            entries[entry.id] = entry
-            return entries
+            entries[entry.id] = entry;
+            return entries;
           }, {})
-      }
+      };
     }
+
+    case "SET_TIME_ENTRIES": {
+      return {
+        ...state,
+        ids: action.payload.map(entry => entry.id),
+        entries: action.payload.reduce((entries, entry) => {
+          entries[entry.id] = entry;
+          return entries;
+        }, {})
+      };
+    }
+
+    case "SET_START_FILTER": {
+      return {
+        ...state,
+        filter: {
+          ...state.filter,
+          start: action.payload
+        }
+      };
+    }
+
+    case "SET_END_FILTER": {
+      return {
+        ...state,
+        filter: {
+          ...state.filter,
+          end: action.payload
+        }
+      };
+    }
+
     default:
-      return state
+      return state;
   }
 }
 
-export function getEntry (state: State, id: string): TimeEntry {
-  return state.entries[id]
+export function getEntry(state: State, id: string): TimeEntry {
+  return state.entries[id];
 }
 
-export function getEntries (state: State): TimeEntry[] {
-  return state.ids
-    .map((id) => getEntry(state, id))
+export function getEntries(state: State): TimeEntry[] {
+  return state.ids.map(id => getEntry(state, id));
+}
+
+export function getFilter(state: State): TimeEntryFilter {
+  return state.filter;
 }

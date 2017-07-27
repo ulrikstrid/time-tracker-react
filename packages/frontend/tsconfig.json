@@ -16,9 +16,8 @@
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
-    "plugins": [
-      { "name": "tslint-language-service"}
-    ]
+    "plugins": [{ "name": "tslint-language-service" }],
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_modules",
@@ -29,7 +28,5 @@
     "jest",
     "src/setupTests.ts"
   ],
-  "types": [
-    "typePatches"
-  ]
+  "types": ["typePatches"]
 }

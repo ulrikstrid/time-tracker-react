@@ -11,7 +11,8 @@
 		"dev": "npm run watch:tsc & npm run watch:server",
 		"test": "lab --sourcemaps --transform node_modules/lab-transform-typescript",
 		"watch:test": "nodemon --delay 2 --watch src --watch test  -r ts --exec npm test",
-		"migrate": "pg-migrate",
+    "migrate": "pg-migrate",
+    "migrate:create": "pg-migrate create",
 		"migrate:up": "pg-migrate up -m build/migrations",
 		"migrate:down": "pg-migrate down -m build/migrations"
 	},

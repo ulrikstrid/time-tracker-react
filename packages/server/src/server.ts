@@ -7,24 +7,29 @@ import * as TimeEntry from "./TimeEntry";
 import { InitConfig } from "./config";
 
 export function init(configs: InitConfig) {
-	return new Promise<Hapi.Server>(resolve => {
-		const port = process.env.PORT || configs.server.port;
-		const server = new Hapi.Server();
-		const db = pgp()(configs.db);
+  return new Promise<Hapi.Server>(resolve => {
+    const port = process.env.PORT || configs.server.port;
+    const server = new Hapi.Server();
+    const pga = pgp();
 
-		server.app.db = db;
+    // date should be returned as text
+    pga.pg.types.setTypeParser(1082, val => val);
 
-		server.connection({
-			port: port,
-			routes: {
-				cors: true
-			}
-		});
+    const db = pga(configs.db);
 
-		Projects.init(server);
-		Task.init(server);
-		TimeEntry.init(server);
+    server.app.db = db;
 
-		resolve(server);
-	});
+    server.connection({
+      port: port,
+      routes: {
+        cors: true
+      }
+    });
+
+    Projects.init(server);
+    Task.init(server);
+    TimeEntry.init(server);
+
+    resolve(server);
+  });
 }

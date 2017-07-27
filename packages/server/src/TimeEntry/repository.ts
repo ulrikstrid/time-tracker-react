@@ -6,26 +6,37 @@ import {
   validateTimeEntry,
   timeEntryFromDB
 } from "./model";
-import * as pga from "pg-promise";
+import * as pgp from "pg-promise";
 
 export function getTimeEntries(
-  db: pga.IDatabase<any>,
-  taskId: string
+  db: pgp.IDatabase<any>,
+  taskId?: string
 ): Promise<TimeEntry[]> {
+  if (taskId) {
+    return db
+      .any(
+        `
+        SELECT *
+        FROM time_entry
+        WHERE task_id = $1
+      `,
+        [taskId]
+      )
+      .then((entries: TimeEntryDB[]) => entries.map(timeEntryFromDB));
+  }
+
   return db
     .any(
       `
-      SELECT *
-      FROM time_entry
-      WHERE task_id = $1
-    `,
-      [taskId]
+        SELECT *
+        FROM time_entry
+      `
     )
     .then((entries: TimeEntryDB[]) => entries.map(timeEntryFromDB));
 }
 
 export function getTimeEntry(
-  db: pga.IDatabase<any>,
+  db: pgp.IDatabase<any>,
   id: string
 ): Promise<TimeEntry> {
   return db
@@ -41,7 +52,7 @@ export function getTimeEntry(
 }
 
 export function saveTimeEntry(
-  db: pga.IDatabase<any>,
+  db: pgp.IDatabase<any>,
   taskId: string,
   newTimeEntry: NewTimeEntry
 ): Promise<TimeEntry> {
@@ -49,21 +60,22 @@ export function saveTimeEntry(
     .then(validTimeEntry => {
       return db.one(
         `
-          INSERT INTO time_entry(id, task_id, start_time, end_time)
-          VALUES($1, $2, $3, $4)
-          RETURNING id, task_id, start_time, end_time
+          INSERT INTO time_entry(id, task_id, start_time, end_time, date)
+          VALUES($1, $2, $3, $4, $5)
+          RETURNING id, task_id, start_time, end_time, date
         `,
         [
           validTimeEntry.id,
           validTimeEntry.taskId,
           validTimeEntry.from,
-          validTimeEntry.to
+          validTimeEntry.to,
+          pgp.as.text(validTimeEntry.date)
         ]
       );
     })
     .then(timeEntryFromDB)
     .then(timeEntry => {
-      console.log(timeEntry);
+      console.log("timeEntry: ", timeEntry);
       return timeEntry;
     });
 }
