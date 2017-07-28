@@ -1,6 +1,6 @@
 import * as React from "react";
 import { storiesOf } from "@storybook/react";
-import { Table, Thead, Tbody, Tr, Th, Td } from "../components/Table";
+import { Table, Thead, Tbody, Tr, Th, Td } from "../primitives/Table";
 import "../index.css";
 
 type RowData = {

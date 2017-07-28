@@ -5,15 +5,23 @@ import { Task } from "../models/Task";
 import { TimeEntry, timeToNumber } from "../models/TimeEntry";
 import { TimeEntryFilter } from "../state/reducers/entries";
 
-import { Table, Thead, Tbody, Tr, Th, Td } from "./Table";
+import { Table, Thead, Tbody, Tr, Th, Td } from "../primitives/Table";
+import TimeInput from "../primitives/TimeInput";
+
+interface UpdateEntry {
+  (id: string, patch: Partial<TimeEntry>): void;
+}
 
 interface Props {
   tasks: Task[];
   timeEntries: TimeEntry[];
   filter: TimeEntryFilter;
+  updateEntry: UpdateEntry;
 }
 
-const rowDataToRow = (tasks: Task[]) => (entry: TimeEntry) => {
+const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
+  entry: TimeEntry
+) => {
   const entryTask = tasks.find(task => task.id === entry.taskId);
 
   return (
@@ -22,15 +30,25 @@ const rowDataToRow = (tasks: Task[]) => (entry: TimeEntry) => {
         {entryTask ? entryTask.name : ""}
       </Td>
       <Td>
-        {entry.date.format("MMM Do -YY")}
+        <input
+          type="date"
+          defaultValue={entry.date.format("YYYY-MM-DD")}
+          onChange={e => {
+            console.log(e.target.value);
+
+            updateEntry(entry.id, {
+              date: moment(e.target.value, "YYYY-MM-DD")
+            });
+          }}
+        />
       </Td>
       <Td>
-        <input
+        <TimeInput
           defaultValue={moment(entry.from, "HH:mm").format("HH:mm").toString()}
         />
       </Td>
       <Td>
-        <input
+        <TimeInput
           defaultValue={moment(entry.to, "HH:mm").format("HH:mm").toString()}
         />
       </Td>
@@ -40,6 +58,26 @@ const rowDataToRow = (tasks: Task[]) => (entry: TimeEntry) => {
     </Tr>
   );
 };
+
+const NewEntryRow = ({ tasks }: { tasks: Task[] }) =>
+  <Tr key="new-row">
+    <Td>
+      <input />
+    </Td>
+    <Td>
+      <input type="date" />
+    </Td>
+    <Td>
+      <TimeInput
+        defaultValue="08:00"
+        onChange={(value, mom) => console.log(value, mom)}
+      />
+    </Td>
+    <Td>
+      <TimeInput defaultValue="08:00" />
+    </Td>
+    <Td>0 h</Td>
+  </Tr>;
 
 export default class TimeList extends React.PureComponent<Props, any> {
   render() {
@@ -64,7 +102,10 @@ export default class TimeList extends React.PureComponent<Props, any> {
           </Tr>
         </Thead>
         <Tbody>
-          {sortedEntries.map(rowDataToRow(this.props.tasks))}
+          <NewEntryRow tasks={this.props.tasks} />
+          {sortedEntries.map(
+            rowDataToRow(this.props.tasks, this.props.updateEntry)
+          )}
         </Tbody>
       </Table>
     );
