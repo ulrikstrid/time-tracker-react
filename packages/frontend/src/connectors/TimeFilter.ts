@@ -14,8 +14,8 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-  setFilterStart: (start: Date) => void;
-  setFilterEnd: (end: Date) => void;
+  setFilterStart: (start: Date | string | null | undefined) => void;
+  setFilterEnd: (end: Date | string | null | undefined) => void;
   // removeProject: (id: string) => RemoveProject;
 }
 
@@ -27,8 +27,12 @@ function mapStateToProps(appState: AppState): StateToProps {
 
 function mapDispatchToProps(dispatch: Dispatch<AppActions>): DispatchToProps {
   return {
-    setFilterStart: (start: Date) => dispatch(setFilterStart(start)),
-    setFilterEnd: (end: Date) => dispatch(setFilterEnd(end))
+    setFilterStart: start => {
+      if (start) dispatch(setFilterStart(start));
+    },
+    setFilterEnd: end => {
+      if (end) dispatch(setFilterEnd(end));
+    }
   };
 }
 

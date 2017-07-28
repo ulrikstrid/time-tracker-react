@@ -7,8 +7,8 @@ import { dayPickerStrings } from "../config";
 
 interface Props {
   filter: TimeEntryFilter;
-  setFilterStart: (start: Date | string) => void;
-  setFilterEnd: (end: Date | string) => void;
+  setFilterStart: (start: Date | string | null | undefined) => void;
+  setFilterEnd: (end: Date | string | null | undefined) => void;
 }
 
 const Wrapper = styled.div`
@@ -31,7 +31,7 @@ const PickerWrapper = styled.div`
   margin: 5px;
 `;
 
-export default class TimeFilter extends React.PureComponent<Props, void> {
+export default class TimeFilter extends React.PureComponent<Props, {}> {
   render() {
     return (
       <Wrapper>

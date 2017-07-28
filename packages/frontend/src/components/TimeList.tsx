@@ -71,7 +71,7 @@ const tableColumns = (tasks: Task[]): ColumnProps<TimeEntry>[] => [
   }
 ];
 
-export default class TimeList extends React.PureComponent<Props, void> {
+export default class TimeList extends React.PureComponent<Props, any> {
   render() {
     const sortedEntries = this.props.timeEntries
       .filter(entry => {
