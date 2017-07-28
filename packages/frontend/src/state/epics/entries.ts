@@ -5,14 +5,15 @@ import {
   Actions,
   SetEntries,
   GetEntries,
-  UpdateEntry,
-  SetEntry
+  UpdateEntry
 } from "../actionCreators/entries";
 import * as R from "ramda";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/filter";
 import "rxjs/add/operator/mergeMap";
+import "rxjs/add/operator/bufferTime";
+import "rxjs/add/operator/concat";
 
 export const getTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
   action$
@@ -32,30 +33,51 @@ export const getTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
 export const updateTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
   action$
     .filter(action => action.type === "UPDATE_ENTRY")
-    .mergeMap((action: UpdateEntry) => {
-      const datePatch: Partial<TimeEntryAPI> = action.payload.patch.date
-        ? { date: action.payload.patch.date.format("YYYY-MM-DD").toString() }
-        : {};
+    .bufferTime(500)
+    .filter(actions => actions.length !== 0)
+    .mergeMap((actions: UpdateEntry[]) => {
+      const updates = actions.reduce(
+        (obj: { [id: string]: Partial<TimeEntryAPI> }, action: UpdateEntry) => {
+          const datePatch: Partial<TimeEntryAPI> = action.payload.patch.date
+            ? {
+                date: action.payload.patch.date.format("YYYY-MM-DD").toString()
+              }
+            : {};
 
-      const patch: Partial<TimeEntryAPI> = {
-        ...<Partial<TimeEntryAPI>>R.omit(["date"], action.payload.patch),
-        ...datePatch
-      };
+          const patch: Partial<TimeEntryAPI> = {
+            ...R.omit(["date"], action.payload.patch) as Partial<TimeEntryAPI>,
+            ...datePatch
+          };
 
-      return fetch(`/api/timeentries/${action.payload.id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
+          return {
+            ...obj,
+            [action.payload.id]: {
+              ...obj[action.payload.id],
+              ...patch
+            }
+          };
         },
-        body: JSON.stringify(patch)
-      })
-        .then(x => x.json())
-        .then(fromApi);
+        {}
+      );
+
+      return Promise.all(
+        Object.keys(updates).map(id =>
+          fetch(`/api/timeentries/${id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify(updates[id])
+          })
+            .then(x => x.json())
+            .then(fromApi)
+        )
+      );
     })
-    .map((timeEntry: TimeEntry): SetEntry => {
+    .map((timeEntries: TimeEntry[]): SetEntries => {
       return {
-        type: "SET_ENTRY",
-        payload: timeEntry
+        type: "SET_TIME_ENTRIES",
+        payload: timeEntries
       };
     });
 

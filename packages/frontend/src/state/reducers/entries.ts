@@ -61,11 +61,17 @@ export function reducer(state: State = initialState, action: AppActions) {
     case "SET_TIME_ENTRIES": {
       return {
         ...state,
-        ids: action.payload.map(entry => entry.id),
-        entries: action.payload.reduce((entries, entry) => {
-          entries[entry.id] = entry;
-          return entries;
-        }, {})
+        ids: R.uniq([...action.payload.map(entry => entry.id), ...state.ids]),
+        updatingIds: state.updatingIds.filter(id =>
+          R.contains(id, state.updatingIds)
+        ),
+        entries: action.payload.reduce(
+          (entries, entry) => ({
+            ...entries,
+            [entry.id]: entry
+          }),
+          { ...state.entries }
+        )
       };
     }
 
@@ -92,7 +98,7 @@ export function reducer(state: State = initialState, action: AppActions) {
     case "UPDATE_ENTRY": {
       return {
         ...state,
-        updatingIds: [...state.updatingIds, action.payload.id]
+        updatingIds: R.uniq([...state.updatingIds, action.payload.id])
       };
     }
 
