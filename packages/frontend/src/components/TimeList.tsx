@@ -6,7 +6,6 @@ import { TimeEntry, timeToNumber } from "../models/TimeEntry";
 import { TimeEntryFilter } from "../state/reducers/entries";
 
 import { Table, Thead, Tbody, Tr, Th, Td } from "../primitives/Table";
-import TimeInput from "../primitives/TimeInput";
 
 interface UpdateEntry {
   (id: string, patch: Partial<TimeEntry>): void;
@@ -62,19 +61,22 @@ const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
 const NewEntryRow = ({ tasks }: { tasks: Task[] }) =>
   <Tr key="new-row">
     <Td>
-      <input />
+      <select>
+        {tasks.map(task =>
+          <option key={task.id} value={task.id}>
+            {task.name}
+          </option>
+        )}
+      </select>
     </Td>
     <Td>
       <input type="date" />
     </Td>
     <Td>
-      <TimeInput
-        defaultValue="08:00"
-        onChange={(value, mom) => console.log(value, mom)}
-      />
+      <input defaultValue="08:00" onChange={e => console.log(e)} />
     </Td>
     <Td>
-      <TimeInput defaultValue="08:00" />
+      <input defaultValue="16:00" onChange={e => console.log(e)} />
     </Td>
     <Td>0 h</Td>
   </Tr>;
