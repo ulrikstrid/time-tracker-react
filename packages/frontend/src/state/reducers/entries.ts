@@ -1,4 +1,5 @@
 import * as moment from "moment";
+import * as R from "ramda";
 
 import { TimeEntry } from "../../models/TimeEntry";
 import { AppActions } from "../index";
@@ -13,12 +14,14 @@ export type State = {
   entries: {
     [key: string]: TimeEntry;
   };
+  updatingIds: string[];
   filter: TimeEntryFilter;
 };
 
 export const initialState: State = {
   ids: [],
   entries: {},
+  updatingIds: [],
   filter: {
     start: moment().weekday(0),
     end: moment().weekday(6)
@@ -82,6 +85,25 @@ export function reducer(state: State = initialState, action: AppActions) {
         filter: {
           ...state.filter,
           end: action.payload
+        }
+      };
+    }
+
+    case "UPDATE_ENTRY": {
+      return {
+        ...state,
+        updatingIds: [...state.updatingIds, action.payload.id]
+      };
+    }
+
+    case "SET_ENTRY": {
+      return {
+        ...state,
+        updatingIds: state.updatingIds.filter(id => id !== action.payload.id),
+        ids: R.uniq([...state.ids, action.payload.id]),
+        entries: {
+          ...state.entries,
+          [action.payload.id]: action.payload
         }
       };
     }

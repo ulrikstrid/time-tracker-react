@@ -77,7 +77,7 @@ export function init(server: Hapi.Server) {
           .updateTimeEntry(
             request.server.app.db,
             request.params.id,
-            JSON.parse(request.payload)
+            request.payload
           )
           .then(task => reply(null, task))
           .catch(error => {

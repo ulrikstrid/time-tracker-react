@@ -21,6 +21,11 @@ export type SetEntries = {
   payload: TimeEntry[];
 };
 
+export type SetEntry = {
+  type: "SET_ENTRY";
+  payload: TimeEntry;
+};
+
 export type GetEntries = {
   type: "GET_TIME_ENTRIES";
 };
@@ -43,20 +48,15 @@ export type UpdateEntry = {
   };
 };
 
-export type ChangeEntry = {
-  type: "CHANGE_ENTRY";
-  payload: TimeEntry;
-};
-
 export type Actions =
   | AddEntry
   | RemoveEntry
   | GetEntries
   | SetEntries
+  | SetEntry
   | SetEndFilter
   | SetStartFilter
-  | UpdateEntry
-  | ChangeEntry;
+  | UpdateEntry;
 
 export function addEntry(
   projectId: string,

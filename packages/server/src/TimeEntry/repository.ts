@@ -4,7 +4,8 @@ import {
   NewTimeEntry,
   createTimeEntry,
   validateTimeEntry,
-  timeEntryFromDB
+  timeEntryFromDB,
+  timeEntryToDB
 } from "./model";
 import * as pgp from "pg-promise";
 
@@ -85,9 +86,9 @@ export function updateTimeEntry(
   entryId: string,
   partialTimeEntry: Partial<TimeEntry>
 ): Promise<TimeEntry> {
-  const setStatement = Object.keys(partialTimeEntry)
+  const setStatement = Object.keys(timeEntryToDB(partialTimeEntry))
     .map((key, index) => `${key} = $${index + 2}`)
-    .join(" ");
+    .join(", ");
 
   const values: any[] = Object.keys(partialTimeEntry).map(
     (key): any => (<any>partialTimeEntry)[key]

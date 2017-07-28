@@ -1,5 +1,6 @@
 import * as uuid from "uuid";
 import * as Joi from "joi";
+import * as R from "ramda";
 
 export type TimeEntry = {
   id: string;
@@ -23,6 +24,8 @@ export type TimeEntryDB = {
   task_id: string;
   date: string;
 };
+
+const removeUndefined = R.pickBy(value => value !== undefined);
 
 const uuidv4 = Joi.string().guid({
   version: ["uuidv4"]
@@ -54,6 +57,18 @@ export function timeEntryFromDB(dbFormat: TimeEntryDB): TimeEntry {
     to: dbFormat.end_time,
     date: dbFormat.date.toString().substr(0, 10)
   };
+}
+
+export function timeEntryToDB(
+  timeEntry: Partial<TimeEntry>
+): Partial<TimeEntryDB> {
+  return removeUndefined({
+    id: timeEntry.id,
+    task_id: timeEntry.taskId,
+    start_time: timeEntry.from,
+    end_time: timeEntry.to,
+    date: timeEntry.date ? timeEntry.date.toString().substr(0, 10) : undefined
+  });
 }
 
 export function validateTimeEntry(timeEntry: any): Promise<TimeEntry> {

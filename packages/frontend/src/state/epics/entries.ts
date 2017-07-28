@@ -1,13 +1,14 @@
 import { Epic, combineEpics } from "redux-observable";
 import { AppState } from "../index";
-import { TimeEntry, fromApi } from "../../models/TimeEntry";
+import { TimeEntry, fromApi, TimeEntryAPI } from "../../models/TimeEntry";
 import {
   Actions,
   SetEntries,
   GetEntries,
   UpdateEntry,
-  ChangeEntry
+  SetEntry
 } from "../actionCreators/entries";
+import * as R from "ramda";
 
 import "rxjs/add/operator/map";
 import "rxjs/add/operator/filter";
@@ -31,17 +32,29 @@ export const getTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
 export const updateTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
   action$
     .filter(action => action.type === "UPDATE_ENTRY")
-    .mergeMap((action: UpdateEntry) =>
-      fetch(`/api/timeentries/${action.payload.id}`, {
+    .mergeMap((action: UpdateEntry) => {
+      const datePatch: Partial<TimeEntryAPI> = action.payload.patch.date
+        ? { date: action.payload.patch.date.format("YYYY-MM-DD").toString() }
+        : {};
+
+      const patch: Partial<TimeEntryAPI> = {
+        ...<Partial<TimeEntryAPI>>R.omit(["date"], action.payload.patch),
+        ...datePatch
+      };
+
+      return fetch(`/api/timeentries/${action.payload.id}`, {
         method: "PATCH",
-        body: JSON.stringify(action.payload.patch)
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(patch)
       })
         .then(x => x.json())
-        .then(fromApi)
-    )
-    .map((timeEntry: TimeEntry): ChangeEntry => {
+        .then(fromApi);
+    })
+    .map((timeEntry: TimeEntry): SetEntry => {
       return {
-        type: "CHANGE_ENTRY",
+        type: "SET_ENTRY",
         payload: timeEntry
       };
     });

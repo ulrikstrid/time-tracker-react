@@ -34,10 +34,8 @@ const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
           type="date"
           defaultValue={entry.date.format("YYYY-MM-DD")}
           onChange={e => {
-            console.log(e.target.value);
-
             updateEntry(entry.id, {
-              date: moment(e.target.value, "YYYY-MM-DD")
+              date: moment(e.target.value, "YYYY-MM-DD", true)
             });
           }}
         />
