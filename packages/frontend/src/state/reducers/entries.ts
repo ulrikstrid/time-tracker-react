@@ -11,17 +11,17 @@ export type TimeEntryFilter = {
 
 export type State = {
   ids: string[];
+  updatingIds: string[];
   entries: {
     [key: string]: TimeEntry;
   };
-  updatingIds: string[];
   filter: TimeEntryFilter;
 };
 
 export const initialState: State = {
   ids: [],
-  entries: {},
   updatingIds: [],
+  entries: {},
   filter: {
     start: moment().weekday(0),
     end: moment().weekday(6)
