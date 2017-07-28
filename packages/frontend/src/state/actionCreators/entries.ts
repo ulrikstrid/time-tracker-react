@@ -35,13 +35,28 @@ export type SetEndFilter = {
   payload: moment.Moment;
 };
 
+export type UpdateEntry = {
+  type: "UPDATE_ENTRY";
+  payload: {
+    id: string;
+    patch: Partial<TimeEntry>;
+  };
+};
+
+export type ChangeEntry = {
+  type: "CHANGE_ENTRY";
+  payload: TimeEntry;
+};
+
 export type Actions =
   | AddEntry
   | RemoveEntry
   | GetEntries
   | SetEntries
   | SetEndFilter
-  | SetStartFilter;
+  | SetStartFilter
+  | UpdateEntry
+  | ChangeEntry;
 
 export function addEntry(
   projectId: string,
@@ -72,16 +87,33 @@ export function removeEntry(entryId: string): RemoveEntry {
   };
 }
 
-export function setFilterStart(date: string | moment.Moment): SetStartFilter {
+export function setFilterStart(
+  date: string | Date | moment.Moment
+): SetStartFilter {
   return {
     type: "SET_START_FILTER",
     payload: moment(date)
   };
 }
 
-export function setFilterEnd(date: string | moment.Moment): SetEndFilter {
+export function setFilterEnd(
+  date: string | Date | moment.Moment
+): SetEndFilter {
   return {
     type: "SET_END_FILTER",
     payload: moment(date)
+  };
+}
+
+export function updateEntry(
+  id: string,
+  patch: Partial<TimeEntry>
+): UpdateEntry {
+  return {
+    type: "UPDATE_ENTRY",
+    payload: {
+      id,
+      patch
+    }
   };
 }

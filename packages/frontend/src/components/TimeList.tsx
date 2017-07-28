@@ -5,49 +5,82 @@ import { Task } from "../models/Task";
 import { TimeEntry, timeToNumber } from "../models/TimeEntry";
 import { TimeEntryFilter } from "../state/reducers/entries";
 
+import { Table, Thead, Tbody, Tr, Th, Td } from "../primitives/Table";
+import TimeInput from "../primitives/TimeInput";
+
+interface UpdateEntry {
+  (id: string, patch: Partial<TimeEntry>): void;
+}
+
 interface Props {
   tasks: Task[];
   timeEntries: TimeEntry[];
   filter: TimeEntryFilter;
-  getTimeEntries: () => void;
+  updateEntry: UpdateEntry;
 }
 
-export const TimeRow = (tasks: Task[]) => (entry: TimeEntry, index: number) => {
+const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
+  entry: TimeEntry
+) => {
   const entryTask = tasks.find(task => task.id === entry.taskId);
-  const entryMoment = moment(entry.date);
 
   return (
-    <tr key={entry.id}>
-      <td>
-        {index}
-      </td>
-      <td>
-        {entryMoment.format("MMM Do YY")}
-      </td>
-      <td>
-        <input defaultValue={entry.from} type="time" />
-      </td>
-      <td>
-        <input defaultValue={entry.to} type="time" />
-      </td>
-      <td>
-        {(timeToNumber(entry.to) - timeToNumber(entry.from)) / 60}
-      </td>
-      <td>
+    <Tr key={entry.id}>
+      <Td>
         {entryTask ? entryTask.name : ""}
-      </td>
-    </tr>
+      </Td>
+      <Td>
+        <input
+          type="date"
+          defaultValue={entry.date.format("YYYY-MM-DD")}
+          onChange={e => {
+            console.log(e.target.value);
+
+            updateEntry(entry.id, {
+              date: moment(e.target.value, "YYYY-MM-DD")
+            });
+          }}
+        />
+      </Td>
+      <Td>
+        <TimeInput
+          defaultValue={moment(entry.from, "HH:mm").format("HH:mm").toString()}
+        />
+      </Td>
+      <Td>
+        <TimeInput
+          defaultValue={moment(entry.to, "HH:mm").format("HH:mm").toString()}
+        />
+      </Td>
+      <Td>
+        {(timeToNumber(entry.to) - timeToNumber(entry.from)) / 60} h
+      </Td>
+    </Tr>
   );
 };
 
-export default class TimeList extends React.PureComponent<Props, void> {
-  render() {
-    console.log(
-      this.props.filter.start,
-      this.props.filter.end,
-      this.props.filter.end.diff(this.props.filter.start, "day")
-    );
+const NewEntryRow = ({ tasks }: { tasks: Task[] }) =>
+  <Tr key="new-row">
+    <Td>
+      <input />
+    </Td>
+    <Td>
+      <input type="date" />
+    </Td>
+    <Td>
+      <TimeInput
+        defaultValue="08:00"
+        onChange={(value, mom) => console.log(value, mom)}
+      />
+    </Td>
+    <Td>
+      <TimeInput defaultValue="08:00" />
+    </Td>
+    <Td>0 h</Td>
+  </Tr>;
 
+export default class TimeList extends React.PureComponent<Props, any> {
+  render() {
     const sortedEntries = this.props.timeEntries
       .filter(entry => {
         return (
@@ -58,21 +91,23 @@ export default class TimeList extends React.PureComponent<Props, void> {
       .sort((a, b) => a.date.diff(b.date));
 
     return (
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Date</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Total</th>
-            <th>Task</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedEntries.map(TimeRow(this.props.tasks))}
-        </tbody>
-      </table>
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Task</Th>
+            <Th>Date</Th>
+            <Th>From</Th>
+            <Th>To</Th>
+            <Th>Total</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          <NewEntryRow tasks={this.props.tasks} />
+          {sortedEntries.map(
+            rowDataToRow(this.props.tasks, this.props.updateEntry)
+          )}
+        </Tbody>
+      </Table>
     );
   }
 }

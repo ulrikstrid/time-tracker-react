@@ -14,7 +14,7 @@ import TaskList from "./connectors/TaskList";
 import TimeFilter from "./connectors/TimeFilter";
 import TimeList from "./connectors/TimeList";
 
-class App extends React.Component<{}, null> {
+class App extends React.Component<{}, {}> {
   render() {
     return (
       <BrowserRouter>

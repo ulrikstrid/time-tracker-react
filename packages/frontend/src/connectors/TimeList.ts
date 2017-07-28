@@ -6,6 +6,7 @@ import { Task } from "../models/Task";
 import { TimeEntry } from "../models/TimeEntry";
 
 import { TimeEntryFilter } from "../state/reducers/entries";
+import { updateEntry } from "../state/actionCreators/entries";
 
 import {
   AppState,
@@ -24,7 +25,7 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-  getTimeEntries: () => void;
+  updateEntry: (id: string, patch: Partial<TimeEntry>) => void;
   // removeProject: (id: string) => RemoveProject;
 }
 
@@ -38,7 +39,10 @@ function mapStateToProps(appState: AppState): StateToProps {
 
 function mapDispatchToProps(dispatch: Dispatch<AppActions>): DispatchToProps {
   return {
-    getTimeEntries: () => dispatch({ type: "GET_TIME_ENTRIES" })
+    updateEntry: (id, patch) => {
+      console.log(id, patch);
+      dispatch(updateEntry(id, patch));
+    }
     // removeProject: (id: string) => dispatch(removeProject(id))
   };
 }
