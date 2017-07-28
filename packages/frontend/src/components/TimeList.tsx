@@ -11,7 +11,6 @@ interface Props {
   tasks: Task[];
   timeEntries: TimeEntry[];
   filter: TimeEntryFilter;
-  getTimeEntries: () => void;
 }
 
 const rowDataToRow = (tasks: Task[]) => (entry: TimeEntry) => {

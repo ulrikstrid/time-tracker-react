@@ -24,7 +24,6 @@ interface StateToProps {
 }
 
 interface DispatchToProps {
-  getTimeEntries: () => void;
   // removeProject: (id: string) => RemoveProject;
 }
 
@@ -38,7 +37,6 @@ function mapStateToProps(appState: AppState): StateToProps {
 
 function mapDispatchToProps(dispatch: Dispatch<AppActions>): DispatchToProps {
   return {
-    getTimeEntries: () => dispatch({ type: "GET_TIME_ENTRIES" })
     // removeProject: (id: string) => dispatch(removeProject(id))
   };
 }
