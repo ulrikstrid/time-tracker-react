@@ -67,4 +67,24 @@ export function init(server: Hapi.Server) {
       }
     }
   });
+
+  server.route({
+    method: "PATCH",
+    path: "/api/timeentries/{id}",
+    config: {
+      handler: (request, reply) => {
+        repo
+          .updateTimeEntry(
+            request.server.app.db,
+            request.params.id,
+            JSON.parse(request.payload)
+          )
+          .then(task => reply(null, task))
+          .catch(error => {
+            console.log(error);
+            reply(error, null);
+          });
+      }
+    }
+  });
 }

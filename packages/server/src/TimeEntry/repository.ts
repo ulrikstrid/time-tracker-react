@@ -79,3 +79,38 @@ export function saveTimeEntry(
       return timeEntry;
     });
 }
+
+export function updateTimeEntry(
+  db: pgp.IDatabase<any>,
+  entryId: string,
+  partialTimeEntry: Partial<TimeEntry>
+): Promise<TimeEntry> {
+  const setStatement = Object.keys(partialTimeEntry)
+    .map((key, index) => `${key} = $${index + 2}`)
+    .join(" ");
+
+  const values: any[] = Object.keys(partialTimeEntry).map(
+    (key): any => (<any>partialTimeEntry)[key]
+  );
+
+  console.log(
+    `
+        UPDATE time_entry
+        SET ${setStatement}
+        WHERE id = $1
+      `,
+    [entryId].concat(values)
+  );
+
+  return db
+    .one(
+      `
+        UPDATE time_entry
+        SET ${setStatement}
+        WHERE id = $1
+        RETURNING id, task_id, start_time, end_time, date
+      `,
+      [entryId].concat(values)
+    )
+    .then(timeEntryFromDB);
+}
