@@ -1,12 +1,11 @@
 import * as React from "react";
 import * as moment from "moment";
 
-import { TimePicker, Table } from "antd";
-import { ColumnProps } from "antd/lib/table/Column";
-
 import { Task } from "../models/Task";
 import { TimeEntry, timeToNumber } from "../models/TimeEntry";
 import { TimeEntryFilter } from "../state/reducers/entries";
+
+import { Table, Thead, Tbody, Tr, Th, Td } from "./Table";
 
 interface Props {
   tasks: Task[];
@@ -15,61 +14,33 @@ interface Props {
   getTimeEntries: () => void;
 }
 
-const tableColumns = (tasks: Task[]): ColumnProps<TimeEntry>[] => [
-  {
-    title: "Task",
-    dataIndex: "taskId",
-    key: "task",
-    render: (taskId, entry) => {
-      const entryTask = tasks.find(task => task.id === entry.taskId);
-      return (
-        <span>
-          {entryTask ? entryTask.name : ""}
-        </span>
-      );
-    }
-  },
-  {
-    title: "Date",
-    dataIndex: "date",
-    key: "date",
-    render: (_, entry) => {
-      return (
-        <span>
-          {entry.date.format("MMM Do -YY")}
-        </span>
-      );
-    }
-  },
-  {
-    title: "From",
-    dataIndex: "from",
-    key: "from",
-    render: from => {
-      return <TimePicker defaultValue={moment(from, "HH:mm")} />;
-    }
-  },
-  {
-    title: "To",
-    dataIndex: "to",
-    key: "to",
-    render: to => {
-      return <TimePicker defaultValue={moment(to, "HH:mm")} />;
-    }
-  },
-  {
-    title: "Total",
-    dataIndex: "total",
-    key: "total",
-    render: (_, entry) => {
-      return (
-        <span>
-          {(timeToNumber(entry.to) - timeToNumber(entry.from)) / 60} h
-        </span>
-      );
-    }
-  }
-];
+const rowDataToRow = (tasks: Task[]) => (entry: TimeEntry) => {
+  const entryTask = tasks.find(task => task.id === entry.taskId);
+
+  return (
+    <Tr key={entry.id}>
+      <Td>
+        {entryTask ? entryTask.name : ""}
+      </Td>
+      <Td>
+        {entry.date.format("MMM Do -YY")}
+      </Td>
+      <Td>
+        <input
+          defaultValue={moment(entry.from, "HH:mm").format("HH:mm").toString()}
+        />
+      </Td>
+      <Td>
+        <input
+          defaultValue={moment(entry.to, "HH:mm").format("HH:mm").toString()}
+        />
+      </Td>
+      <Td>
+        {(timeToNumber(entry.to) - timeToNumber(entry.from)) / 60} h
+      </Td>
+    </Tr>
+  );
+};
 
 export default class TimeList extends React.PureComponent<Props, any> {
   render() {
@@ -83,10 +54,20 @@ export default class TimeList extends React.PureComponent<Props, any> {
       .sort((a, b) => a.date.diff(b.date));
 
     return (
-      <Table
-        dataSource={sortedEntries}
-        columns={tableColumns(this.props.tasks)}
-      />
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Task</Th>
+            <Th>Date</Th>
+            <Th>From</Th>
+            <Th>To</Th>
+            <Th>Total</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {sortedEntries.map(rowDataToRow(this.props.tasks))}
+        </Tbody>
+      </Table>
     );
   }
 }
