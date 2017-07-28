@@ -41,13 +41,15 @@ const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
         />
       </Td>
       <Td>
-        <TimeInput
+        <input
           defaultValue={moment(entry.from, "HH:mm").format("HH:mm").toString()}
+          onChange={e => updateEntry(entry.id, { from: e.target.value })}
         />
       </Td>
       <Td>
-        <TimeInput
+        <input
           defaultValue={moment(entry.to, "HH:mm").format("HH:mm").toString()}
+          onChange={e => updateEntry(entry.id, { to: e.target.value })}
         />
       </Td>
       <Td>
