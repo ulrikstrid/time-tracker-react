@@ -1,3 +1,4 @@
+/*
 import * as React from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
@@ -192,3 +193,4 @@ const AddTimeConnector: React.ComponentClass<OwnProps> = connect<
   OwnProps
 >(mapStateToProps, mapDispatchToProps)(AddTimeConnectorClass);
 export default AddTimeConnector;
+*/

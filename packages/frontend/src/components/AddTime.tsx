@@ -1,3 +1,4 @@
+/*
 import * as React from "react";
 import { Task } from "../models/Task";
 import { TimeEntry } from "../models/TimeEntry";
@@ -44,3 +45,4 @@ export function AddTime(props: Props) {
     </div>
   );
 }
+*/
