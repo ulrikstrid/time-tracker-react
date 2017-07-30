@@ -6,6 +6,8 @@ import { createEpicMiddleware } from "redux-observable";
 import { composeWithDevTools } from "redux-devtools-extension";
 import * as moment from "moment";
 import "moment/locale/sv";
+import * as momentLocalizer from "react-widgets/lib/localizers/moment";
+import "react-widgets/dist/css/react-widgets.css";
 
 import App from "./App";
 import registerServiceWorker from "./registerServiceWorker";
@@ -15,6 +17,7 @@ import "./index.css";
 import { AppState, initialState, appReducer, appEpic } from "./state/index";
 
 moment().locale("sv");
+momentLocalizer(moment);
 
 const composeEnhancers = composeWithDevTools(
   {

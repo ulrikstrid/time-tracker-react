@@ -5,7 +5,7 @@ export type TimeEntry = {
   from: string;
   to: string;
   date: moment.Moment;
-  taskId: string;
+  taskId: string | null;
   projectId: string;
 };
 
@@ -14,7 +14,7 @@ export type TimeEntryAPI = {
   from: string;
   to: string;
   date: string;
-  taskId: string;
+  taskId: string | null;
   projectId: string;
 };
 

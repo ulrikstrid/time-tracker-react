@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as moment from "moment";
+import { Combobox, DateTimePicker } from "react-widgets";
 
 import { Task } from "../models/Task";
 import { TimeEntry, timeToNumber } from "../models/TimeEntry";
@@ -21,34 +22,46 @@ interface Props {
 const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
   entry: TimeEntry
 ) => {
-  const entryTask = tasks.find(task => task.id === entry.taskId);
-
   return (
     <Tr key={entry.id}>
       <Td>
-        {entryTask ? entryTask.name : ""}
+        <Combobox
+          suggest={true}
+          valueField="id"
+          textField="name"
+          data={[{ id: null, name: "No task" }, ...tasks]}
+          defaultValue={entry.taskId}
+          onChange={task => {
+            updateEntry(entry.id, { taskId: task.id });
+          }}
+        />
       </Td>
       <Td>
-        <input
-          type="date"
-          defaultValue={entry.date.format("YYYY-MM-DD")}
-          onChange={e => {
+        <DateTimePicker
+          calendar={true}
+          time={false}
+          defaultValue={entry.date.toDate()}
+          onChange={date => {
             updateEntry(entry.id, {
-              date: moment(e.target.value, "YYYY-MM-DD", true)
+              date: moment(date)
             });
           }}
         />
       </Td>
       <Td>
-        <input
-          defaultValue={moment(entry.from, "HH:mm").format("HH:mm").toString()}
-          onChange={e => updateEntry(entry.id, { from: e.target.value })}
+        <DateTimePicker
+          calendar={false}
+          time={true}
+          defaultValue={moment(entry.from, "HH:mm").toDate()}
+          onChange={(date, str) => updateEntry(entry.id, { from: str })}
         />
       </Td>
       <Td>
-        <input
-          defaultValue={moment(entry.to, "HH:mm").format("HH:mm").toString()}
-          onChange={e => updateEntry(entry.id, { to: e.target.value })}
+        <DateTimePicker
+          calendar={false}
+          time={true}
+          defaultValue={moment(entry.to, "HH:mm").toDate()}
+          onChange={(date, str) => updateEntry(entry.id, { to: str })}
         />
       </Td>
       <Td>
@@ -61,22 +74,22 @@ const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
 const NewEntryRow = ({ tasks }: { tasks: Task[] }) =>
   <Tr key="new-row">
     <Td>
-      <select>
-        {tasks.map(task =>
-          <option key={task.id} value={task.id}>
-            {task.name}
-          </option>
-        )}
-      </select>
+      <Combobox
+        suggest={true}
+        valueField="id"
+        textField="name"
+        data={[{ id: null, name: "No task" }, ...tasks]}
+        defaultValue={null}
+      />
     </Td>
     <Td>
-      <input type="date" />
+      <DateTimePicker calendar={true} time={false} defaultValue={new Date()} />
     </Td>
     <Td>
-      <input defaultValue="08:00" onChange={e => console.log(e)} />
+      <DateTimePicker calendar={false} time={true} />
     </Td>
     <Td>
-      <input defaultValue="16:00" onChange={e => console.log(e)} />
+      <DateTimePicker calendar={false} time={true} />
     </Td>
     <Td>0 h</Td>
   </Tr>;
@@ -86,8 +99,8 @@ export default class TimeList extends React.PureComponent<Props, any> {
     const sortedEntries = this.props.timeEntries
       .filter(entry => {
         return (
-          entry.date.diff(this.props.filter.end, "day") < 0 &&
-          entry.date.diff(this.props.filter.start, "day") > 0
+          entry.date.diff(this.props.filter.end, "day") <= 0 &&
+          entry.date.diff(this.props.filter.start, "day") >= 0
         );
       })
       .sort((a, b) => a.date.diff(b.date));
