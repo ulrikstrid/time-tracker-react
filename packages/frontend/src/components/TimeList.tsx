@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as moment from "moment";
+import moment from "moment";
 import { Combobox, DateTimePicker } from "react-widgets";
 
 import { Task } from "../models/Task";

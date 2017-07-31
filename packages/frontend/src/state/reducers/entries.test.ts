@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 import { reducer, initialState, getEntries, getEntry, State } from "./entries";
 import { addEntry, removeEntry } from "../actionCreators/entries";
 

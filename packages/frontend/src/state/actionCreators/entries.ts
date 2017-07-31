@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 import { TimeEntry } from "../../models/TimeEntry";
 import * as GUID from "../../models/GUID";
 

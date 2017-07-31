@@ -4,9 +4,9 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import { createEpicMiddleware } from "redux-observable";
 import { composeWithDevTools } from "redux-devtools-extension";
-import * as moment from "moment";
+import moment from "moment";
 import "moment/locale/sv";
-import * as momentLocalizer from "react-widgets/lib/localizers/moment";
+import momentLocalizer from "react-widgets/lib/localizers/moment";
 import "react-widgets/dist/css/react-widgets.css";
 
 import App from "./App";

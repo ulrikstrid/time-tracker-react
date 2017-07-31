@@ -1,9 +1,8 @@
 import * as React from "react";
-import { DatePicker, DayOfWeek } from "office-ui-fabric-react/lib/DatePicker";
+import { DateTimePicker } from "react-widgets";
 import styled from "styled-components";
 
 import { TimeEntryFilter } from "../state/reducers/entries";
-import { dayPickerStrings } from "../config";
 
 interface Props {
   filter: TimeEntryFilter;
@@ -16,9 +15,13 @@ const Wrapper = styled.div`
   flex-direction: row;
   width: 100%;
   flex-wrap: wrap;
-  border 1px solid #444444;
   padding: 10px;
   margin-bottom: 10px;
+`;
+
+const Header = styled.h2`
+  flex: none;
+  width: 100%;
 `;
 
 const P = styled.p`
@@ -35,25 +38,23 @@ export default class TimeFilter extends React.PureComponent<Props, {}> {
   render() {
     return (
       <Wrapper>
-        <P>Filter</P>
+        <Header>Filter</Header>
         <PickerWrapper>
-          <DatePicker
-            firstDayOfWeek={DayOfWeek.Monday}
-            strings={dayPickerStrings}
-            placeholder="Välj ett startdatum"
-            value={this.props.filter.start.toDate()}
-            onSelectDate={date => this.props.setFilterStart(date)}
-            label="Start"
+          <P>Start</P>
+          <DateTimePicker
+            calendar={true}
+            time={false}
+            defaultValue={this.props.filter.start.toDate()}
+            onChange={date => this.props.setFilterStart(date)}
           />
         </PickerWrapper>
         <PickerWrapper>
-          <DatePicker
-            firstDayOfWeek={DayOfWeek.Monday}
-            strings={dayPickerStrings}
-            placeholder="Välj ett slutdatum"
-            value={this.props.filter.end.toDate()}
-            onSelectDate={date => this.props.setFilterEnd(date)}
-            label="Slut"
+          <P>End</P>
+          <DateTimePicker
+            calendar={true}
+            time={false}
+            defaultValue={this.props.filter.end.toDate()}
+            onChange={date => this.props.setFilterEnd(date)}
           />
         </PickerWrapper>
       </Wrapper>

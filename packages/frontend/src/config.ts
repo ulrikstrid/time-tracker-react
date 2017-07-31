@@ -1,4 +1,4 @@
-import * as moment from "moment";
+import moment from "moment";
 import { IDatePickerStrings } from "office-ui-fabric-react/lib/DatePicker";
 
 export const dayPickerStrings: IDatePickerStrings = {
