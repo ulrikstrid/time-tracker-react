@@ -7,6 +7,11 @@ import { TimeEntry, timeToNumber } from "../models/TimeEntry";
 import { TimeEntryFilter } from "../state/reducers/entries";
 
 import { Table, Thead, Tbody, Tr, Th, Td } from "../primitives/Table";
+import { IconButton } from "../primitives/Button";
+
+import NewTimeEntryListRow from "./NewTimeEntryListRow";
+
+const trashCanSVG = require("../svg/bin.svg");
 
 interface UpdateEntry {
   (id: string, patch: Partial<TimeEntry>): void;
@@ -67,35 +72,19 @@ const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
       <Td>
         {(timeToNumber(entry.to) - timeToNumber(entry.from)) / 60} h
       </Td>
+      <Td>
+        <IconButton src={trashCanSVG} />
+      </Td>
     </Tr>
   );
 };
 
-const NewEntryRow = ({ tasks }: { tasks: Task[] }) =>
-  <Tr key="new-row">
-    <Td>
-      <Combobox
-        suggest={true}
-        valueField="id"
-        textField="name"
-        data={[{ id: null, name: "No task" }, ...tasks]}
-        defaultValue={null}
-      />
-    </Td>
-    <Td>
-      <DateTimePicker calendar={true} time={false} defaultValue={new Date()} />
-    </Td>
-    <Td>
-      <DateTimePicker calendar={false} time={true} />
-    </Td>
-    <Td>
-      <DateTimePicker calendar={false} time={true} />
-    </Td>
-    <Td>0 h</Td>
-  </Tr>;
-
 export default class TimeList extends React.PureComponent<Props, any> {
   render() {
+    const saveEntry = (entry: TimeEntry) => {
+      console.log(entry);
+    };
+
     const sortedEntries = this.props.timeEntries
       .filter(entry => {
         return (
@@ -114,10 +103,11 @@ export default class TimeList extends React.PureComponent<Props, any> {
             <Th>From</Th>
             <Th>To</Th>
             <Th>Total</Th>
+            <Th>Action</Th>
           </Tr>
         </Thead>
         <Tbody>
-          <NewEntryRow tasks={this.props.tasks} />
+          <NewTimeEntryListRow tasks={this.props.tasks} saveEntry={saveEntry} />
           {sortedEntries.map(
             rowDataToRow(this.props.tasks, this.props.updateEntry)
           )}

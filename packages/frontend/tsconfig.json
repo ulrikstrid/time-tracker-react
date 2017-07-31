@@ -27,5 +27,6 @@
     "webpack",
     "jest",
     "src/setupTests.ts"
-  ]
+  ],
+  "include": ["node_modules/react-icons/fa/*.js", "src"]
 }

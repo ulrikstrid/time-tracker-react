@@ -1,6 +1,10 @@
 {
   "devDependencies": {
+    "jest": "^20.0.4",
     "lerna": "^2.0.0"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {
+    "test": "jest --projects packages/server packages/frontend"
+  }
 }
