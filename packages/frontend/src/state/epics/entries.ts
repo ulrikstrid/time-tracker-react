@@ -7,7 +7,9 @@ import {
   GetEntries,
   UpdateEntry,
   SaveEntry,
-  AddEntry
+  AddEntry,
+  DeleteEntry,
+  RemoveEntry
 } from "../actionCreators/entries";
 import * as R from "ramda";
 
@@ -32,7 +34,7 @@ export const getTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
       };
     });
 
-export const saveTimeEntriesEpicc: Epic<Actions, AppState> = actions$ =>
+export const saveTimeEntriesEpic: Epic<Actions, AppState> = actions$ =>
   actions$
     .ofType("SAVE_TIME_ENTRY")
     .mergeMap((action: SaveEntry) =>
@@ -50,6 +52,24 @@ export const saveTimeEntriesEpicc: Epic<Actions, AppState> = actions$ =>
       return {
         type: "ADD_TIME_ENTRY",
         payload: entry
+      };
+    });
+
+export const deleteTimeEntriesEpic: Epic<Actions, AppState> = actions$ =>
+  actions$
+    .ofType("DELETE_TIME_ENTRY")
+    .mergeMap((action: DeleteEntry) =>
+      fetch(`/api/timeentries/${action.payload}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }).then(x => x.json())
+    )
+    .map(({ id }: { id: string }): RemoveEntry => {
+      return {
+        type: "REMOVE_TIME_ENTRY",
+        payload: id
       };
     });
 
@@ -107,5 +127,6 @@ export const updateTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
 export const entriesEpic = combineEpics(
   getTimeEntriesEpic,
   updateTimeEntriesEpic,
-  saveTimeEntriesEpicc
+  saveTimeEntriesEpic,
+  deleteTimeEntriesEpic
 );

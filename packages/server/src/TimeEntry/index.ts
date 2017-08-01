@@ -87,4 +87,20 @@ export function init(server: Hapi.Server) {
       }
     }
   });
+
+  server.route({
+    method: "DELETE",
+    path: "/api/timeentries/{id}",
+    config: {
+      handler: (request, reply) => {
+        repo
+          .deleteTimeEntry(request.server.app.db, request.params.id)
+          .then(id => reply(null, { id }))
+          .catch(error => {
+            console.log(error);
+            reply(error, null);
+          });
+      }
+    }
+  });
 }

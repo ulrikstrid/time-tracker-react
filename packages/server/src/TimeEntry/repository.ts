@@ -74,11 +74,7 @@ export function saveTimeEntry(
         ]
       );
     })
-    .then(timeEntryFromDB)
-    .then(timeEntry => {
-      console.log("timeEntry: ", timeEntry);
-      return timeEntry;
-    });
+    .then(timeEntryFromDB);
 }
 
 export function updateTimeEntry(
@@ -105,4 +101,13 @@ export function updateTimeEntry(
       [entryId].concat(values)
     )
     .then(timeEntryFromDB);
+}
+
+export function deleteTimeEntry(
+  db: pgp.IDatabase<any>,
+  entryId: string
+): Promise<string> {
+  return db
+    .none(`DELETE FROM time_entry WHERE id = $1`, [entryId])
+    .then(() => entryId);
 }

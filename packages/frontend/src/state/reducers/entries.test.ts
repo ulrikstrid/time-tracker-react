@@ -1,6 +1,6 @@
 import moment from "moment";
 import { reducer, initialState, getEntries, getEntry, State } from "./entries";
-import { addEntry, removeEntry } from "../actionCreators/entries";
+import { addEntry } from "../actionCreators/entries";
 
 test("no-op task", () => {
   expect(reducer(undefined, { type: "NO_OP" })).toEqual(initialState);
@@ -43,7 +43,10 @@ test("can add entry", () => {
 });
 
 test("can remove entry", () => {
-  const newState = reducer(testState, removeEntry("test-id"));
+  const newState = reducer(testState, {
+    type: "REMOVE_TIME_ENTRY",
+    payload: "test-id"
+  });
 
   expect(newState).toMatchObject({
     ids: ["testId"],

@@ -6,6 +6,11 @@ export type AddEntry = {
   payload: TimeEntry;
 };
 
+export type DeleteEntry = {
+  type: "DELETE_TIME_ENTRY";
+  payload: string;
+};
+
 export type RemoveEntry = {
   type: "REMOVE_TIME_ENTRY";
   payload: string;
@@ -50,6 +55,7 @@ export type SaveEntry = {
 
 export type Actions =
   | AddEntry
+  | DeleteEntry
   | RemoveEntry
   | GetEntries
   | SetEntries
@@ -73,9 +79,9 @@ export function saveEntry(entry: TimeEntry): SaveEntry {
   };
 }
 
-export function removeEntry(entryId: string): RemoveEntry {
+export function deleteEntry(entryId: string): DeleteEntry {
   return {
-    type: "REMOVE_TIME_ENTRY",
+    type: "DELETE_TIME_ENTRY",
     payload: entryId
   };
 }

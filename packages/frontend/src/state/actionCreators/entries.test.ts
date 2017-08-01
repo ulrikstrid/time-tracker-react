@@ -1,6 +1,6 @@
 import moment from "moment";
 
-import { addEntry, removeEntry } from "./entries";
+import { addEntry, deleteEntry } from "./entries";
 
 test("entries actionCreator", () => {
   const from = "8:00";
@@ -28,8 +28,8 @@ test("entries actionCreator", () => {
 
   const testId = "testId";
 
-  expect(removeEntry(testId)).toEqual({
-    type: "REMOVE_TIME_ENTRY",
+  expect(deleteEntry(testId)).toEqual({
+    type: "DELETE_TIME_ENTRY",
     payload: testId
   });
 });

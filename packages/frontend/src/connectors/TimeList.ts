@@ -6,7 +6,11 @@ import { Task } from "../models/Task";
 import { TimeEntry } from "../models/TimeEntry";
 
 import { TimeEntryFilter } from "../state/reducers/entries";
-import { updateEntry, saveEntry } from "../state/actionCreators/entries";
+import {
+  updateEntry,
+  saveEntry,
+  deleteEntry
+} from "../state/actionCreators/entries";
 
 import {
   AppState,
@@ -27,6 +31,7 @@ interface StateToProps {
 interface DispatchToProps {
   updateEntry: (id: string, patch: Partial<TimeEntry>) => void;
   saveEntry: (entry: TimeEntry) => void;
+  deleteEntry: (id: string) => void;
 }
 
 function mapStateToProps(appState: AppState): StateToProps {
@@ -40,7 +45,8 @@ function mapStateToProps(appState: AppState): StateToProps {
 function mapDispatchToProps(dispatch: Dispatch<AppActions>): DispatchToProps {
   return {
     updateEntry: (id, patch) => dispatch(updateEntry(id, patch)),
-    saveEntry: entry => dispatch(saveEntry(entry))
+    saveEntry: entry => dispatch(saveEntry(entry)),
+    deleteEntry: id => dispatch(deleteEntry(id))
   };
 }
 

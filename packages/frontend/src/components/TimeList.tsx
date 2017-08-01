@@ -21,17 +21,24 @@ interface SaveEntry {
   (entry: TimeEntry): void;
 }
 
+interface DeleteEntry {
+  (id: string): void;
+}
+
 interface Props {
   tasks: Task[];
   timeEntries: TimeEntry[];
   filter: TimeEntryFilter;
   updateEntry: UpdateEntry;
   saveEntry: SaveEntry;
+  deleteEntry: DeleteEntry;
 }
 
-const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
-  entry: TimeEntry
-) => {
+const rowDataToRow = (
+  tasks: Task[],
+  updateEntry: UpdateEntry,
+  deleteEntry: DeleteEntry
+) => (entry: TimeEntry) => {
   return (
     <Tr key={entry.id}>
       <Td>
@@ -78,7 +85,7 @@ const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
         {(timeToNumber(entry.to) - timeToNumber(entry.from)) / 60} h
       </Td>
       <Td>
-        <IconButton src={trashCanSVG} />
+        <IconButton src={trashCanSVG} onClick={() => deleteEntry(entry.id)} />
       </Td>
     </Tr>
   );
@@ -113,7 +120,11 @@ export default class TimeList extends React.PureComponent<Props, any> {
             saveEntry={this.props.saveEntry}
           />
           {sortedEntries.map(
-            rowDataToRow(this.props.tasks, this.props.updateEntry)
+            rowDataToRow(
+              this.props.tasks,
+              this.props.updateEntry,
+              this.props.deleteEntry
+            )
           )}
         </Tbody>
       </Table>
