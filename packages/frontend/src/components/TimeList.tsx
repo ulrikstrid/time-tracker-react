@@ -6,7 +6,7 @@ import { Task } from "../models/Task";
 import { TimeEntry, timeToNumber } from "../models/TimeEntry";
 import { TimeEntryFilter } from "../state/reducers/entries";
 
-import { Table, Thead, Tbody, Tr, Th, Td } from "../primitives/Table";
+import { Table, Thead, Tbody, Tfoot, Tr, Th, Td } from "../primitives/Table";
 import { IconButton } from "../primitives/Button";
 
 import NewTimeEntryListRow from "./NewTimeEntryListRow";
@@ -127,6 +127,24 @@ export default class TimeList extends React.PureComponent<Props, any> {
             )
           )}
         </Tbody>
+        <Tfoot>
+          <Tr>
+            <Td />
+            <Td />
+            <Td />
+            <Td />
+            <Th>
+              {sortedEntries.reduce((total, entry) => {
+                return (
+                  total +
+                  (timeToNumber(entry.to) - timeToNumber(entry.from)) / 60
+                );
+              }, 0)}{" "}
+              h
+            </Th>
+            <Td />
+          </Tr>
+        </Tfoot>
       </Table>
     );
   }
