@@ -33,7 +33,7 @@ const uuidv4 = Joi.string().guid({
 
 export const timeEntrySchema = Joi.object().keys({
   id: uuidv4,
-  taskId: uuidv4,
+  taskId: uuidv4.allow(null),
   from: Joi.string(),
   to: Joi.string(),
   date: Joi.string()

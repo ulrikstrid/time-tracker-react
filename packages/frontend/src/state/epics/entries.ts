@@ -5,7 +5,9 @@ import {
   Actions,
   SetEntries,
   GetEntries,
-  UpdateEntry
+  UpdateEntry,
+  SaveEntry,
+  AddEntry
 } from "../actionCreators/entries";
 import * as R from "ramda";
 
@@ -17,7 +19,7 @@ import "rxjs/add/operator/concat";
 
 export const getTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
   action$
-    .filter(action => action.type === "GET_TIME_ENTRIES")
+    .ofType("GET_TIME_ENTRIES")
     .mergeMap((action: GetEntries) =>
       fetch(`/api/timeentries`)
         .then(x => x.json())
@@ -30,9 +32,30 @@ export const getTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
       };
     });
 
+export const saveTimeEntriesEpicc: Epic<Actions, AppState> = actions$ =>
+  actions$
+    .ofType("SAVE_TIME_ENTRY")
+    .mergeMap((action: SaveEntry) =>
+      fetch("/api/timeentries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(action.payload)
+      })
+        .then(x => x.json())
+        .then(fromApi)
+    )
+    .map((entry: TimeEntry): AddEntry => {
+      return {
+        type: "ADD_TIME_ENTRY",
+        payload: entry
+      };
+    });
+
 export const updateTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
   action$
-    .filter(action => action.type === "UPDATE_ENTRY")
+    .ofType("UPDATE_ENTRY")
     .bufferTime(500)
     .filter(actions => actions.length !== 0)
     .mergeMap((actions: UpdateEntry[]) => {
@@ -83,5 +106,6 @@ export const updateTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
 
 export const entriesEpic = combineEpics(
   getTimeEntriesEpic,
-  updateTimeEntriesEpic
+  updateTimeEntriesEpic,
+  saveTimeEntriesEpicc
 );

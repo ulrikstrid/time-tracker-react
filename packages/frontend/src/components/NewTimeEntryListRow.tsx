@@ -27,7 +27,7 @@ class NewTimeEntryListRow extends React.PureComponent<Props, State> {
       to: "16:00",
       date: moment(),
       taskId: null,
-      projectId: ""
+      projectId: null
     };
   }
 

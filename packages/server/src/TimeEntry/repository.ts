@@ -94,15 +94,6 @@ export function updateTimeEntry(
     (key): any => (<any>partialTimeEntry)[key]
   );
 
-  console.log(
-    `
-        UPDATE time_entry
-        SET ${setStatement}
-        WHERE id = $1
-      `,
-    [entryId].concat(values)
-  );
-
   return db
     .one(
       `

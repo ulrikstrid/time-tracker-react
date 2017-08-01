@@ -1,14 +1,9 @@
 import moment from "moment";
 import { TimeEntry } from "../../models/TimeEntry";
-import * as GUID from "../../models/GUID";
 
 export type AddEntry = {
   type: "ADD_TIME_ENTRY";
-  payload: {
-    entry: TimeEntry;
-    taskId: string;
-    projectId: string;
-  };
+  payload: TimeEntry;
 };
 
 export type RemoveEntry = {
@@ -48,6 +43,11 @@ export type UpdateEntry = {
   };
 };
 
+export type SaveEntry = {
+  type: "SAVE_TIME_ENTRY";
+  payload: TimeEntry;
+};
+
 export type Actions =
   | AddEntry
   | RemoveEntry
@@ -56,27 +56,20 @@ export type Actions =
   | SetEntry
   | SetEndFilter
   | SetStartFilter
-  | UpdateEntry;
+  | UpdateEntry
+  | SaveEntry;
 
-export function addEntry(
-  projectId: string,
-  taskId: string,
-  timeEntry: Partial<TimeEntry>
-): AddEntry {
+export function addEntry(timeEntry: TimeEntry): AddEntry {
   return {
     type: "ADD_TIME_ENTRY",
-    payload: {
-      entry: {
-        id: timeEntry.id || GUID.generate(),
-        from: timeEntry.from || "",
-        to: timeEntry.to || "",
-        date: moment(timeEntry.date),
-        taskId,
-        projectId
-      },
-      taskId,
-      projectId
-    }
+    payload: timeEntry
+  };
+}
+
+export function saveEntry(entry: TimeEntry): SaveEntry {
+  return {
+    type: "SAVE_TIME_ENTRY",
+    payload: entry
   };
 }
 

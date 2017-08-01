@@ -34,10 +34,7 @@ const testState: State = {
 };
 
 test("can add entry", () => {
-  const newState = reducer(
-    initialState,
-    addEntry("test-project", "default", firstEntry)
-  );
+  const newState = reducer(initialState, addEntry(firstEntry));
 
   expect(newState.ids).toContain("test-id");
   expect(newState.entries).toEqual({

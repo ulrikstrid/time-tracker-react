@@ -33,11 +33,11 @@ export function reducer(state: State = initialState, action: AppActions) {
     case "ADD_TIME_ENTRY": {
       return {
         ...state,
-        ids: [...state.ids, action.payload.entry.id],
+        ids: [...state.ids, action.payload.id],
         entries: {
           ...state.entries,
-          [action.payload.entry.id]: {
-            ...action.payload.entry
+          [action.payload.id]: {
+            ...action.payload
           }
         }
       };

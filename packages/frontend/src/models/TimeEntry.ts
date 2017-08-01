@@ -6,7 +6,7 @@ export type TimeEntry = {
   to: string;
   date: moment.Moment;
   taskId: string | null;
-  projectId: string;
+  projectId: string | null;
 };
 
 export type TimeEntryAPI = {

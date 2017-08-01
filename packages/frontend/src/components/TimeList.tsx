@@ -17,11 +17,16 @@ interface UpdateEntry {
   (id: string, patch: Partial<TimeEntry>): void;
 }
 
+interface SaveEntry {
+  (entry: TimeEntry): void;
+}
+
 interface Props {
   tasks: Task[];
   timeEntries: TimeEntry[];
   filter: TimeEntryFilter;
   updateEntry: UpdateEntry;
+  saveEntry: SaveEntry;
 }
 
 const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
@@ -81,10 +86,6 @@ const rowDataToRow = (tasks: Task[], updateEntry: UpdateEntry) => (
 
 export default class TimeList extends React.PureComponent<Props, any> {
   render() {
-    const saveEntry = (entry: TimeEntry) => {
-      console.log(entry);
-    };
-
     const sortedEntries = this.props.timeEntries
       .filter(entry => {
         return (
@@ -107,7 +108,10 @@ export default class TimeList extends React.PureComponent<Props, any> {
           </Tr>
         </Thead>
         <Tbody>
-          <NewTimeEntryListRow tasks={this.props.tasks} saveEntry={saveEntry} />
+          <NewTimeEntryListRow
+            tasks={this.props.tasks}
+            saveEntry={this.props.saveEntry}
+          />
           {sortedEntries.map(
             rowDataToRow(this.props.tasks, this.props.updateEntry)
           )}
