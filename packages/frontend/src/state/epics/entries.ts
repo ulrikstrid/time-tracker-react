@@ -23,7 +23,9 @@ export const getTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
   action$
     .ofType("GET_TIME_ENTRIES")
     .mergeMap((action: GetEntries) =>
-      fetch(`/api/timeentries`)
+      fetch(`/api/timeentries`, {
+        credentials: "same-origin"
+      })
         .then(x => x.json())
         .then(entries => entries.map(fromApi))
     )
@@ -40,6 +42,7 @@ export const saveTimeEntriesEpic: Epic<Actions, AppState> = actions$ =>
     .mergeMap((action: SaveEntry) =>
       fetch("/api/timeentries", {
         method: "POST",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json"
         },
@@ -61,6 +64,7 @@ export const deleteTimeEntriesEpic: Epic<Actions, AppState> = actions$ =>
     .mergeMap((action: DeleteEntry) =>
       fetch(`/api/timeentries/${action.payload}`, {
         method: "DELETE",
+        credentials: "same-origin",
         headers: {
           "Content-Type": "application/json"
         }
@@ -107,6 +111,7 @@ export const updateTimeEntriesEpic: Epic<Actions, AppState> = action$ =>
         Object.keys(updates).map(id =>
           fetch(`/api/timeentries/${id}`, {
             method: "PATCH",
+            credentials: "same-origin",
             headers: {
               "Content-Type": "application/json"
             },
