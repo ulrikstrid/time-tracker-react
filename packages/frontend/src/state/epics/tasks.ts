@@ -11,7 +11,9 @@ export const getTaskEpic: Epic<Actions, AppState> = action$ =>
   action$
     .filter(action => action.type === "GET_TASK")
     .mergeMap((action: GetTask) =>
-      fetch(`/api/tasks/${action.payload.taskId}`).then(x => x.json())
+      fetch(`/api/tasks/${action.payload.taskId}`, {
+        credentials: "same-origin"
+      }).then(x => x.json())
     )
     .map((task: Task): AddTask => {
       return {
@@ -29,7 +31,11 @@ export const getTaskEpic: Epic<Actions, AppState> = action$ =>
 export const getTasksEpic: Epic<Actions, AppState> = action$ =>
   action$
     .filter(action => action.type === "GET_TASKS")
-    .mergeMap((action: GetTask) => fetch(`/api/tasks`).then(x => x.json()))
+    .mergeMap((action: GetTask) =>
+      fetch(`/api/tasks`, {
+        credentials: "same-origin"
+      }).then(x => x.json())
+    )
     .map((tasks: Task[]): SetTasks => {
       return {
         type: "SET_TASKS",
